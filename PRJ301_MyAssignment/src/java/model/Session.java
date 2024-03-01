@@ -16,9 +16,9 @@ public class Session {
     private Room room;
     private Time_slot time_slot;
     private Date date;
-    private boolean isTaken;
+    private Boolean isTaken;
 
-    public Session(String id, Group group, Lecturer lecturer, Room room, Time_slot time_slot, Date date, boolean isTaken) {
+    public Session(String id, Group group, Lecturer lecturer, Room room, Time_slot time_slot, Date date, Boolean isTaken) {
         this.id = id;
         this.group = group;
         this.lecturer = lecturer;
@@ -79,13 +79,15 @@ public class Session {
         this.date = date;
     }
 
-    public boolean isIsTaken() {
+    public Boolean getIsTaken() {
         return isTaken;
     }
 
-    public void setIsTaken(boolean isTaken) {
+    public void setIsTaken(Boolean isTaken) {
         this.isTaken = isTaken;
     }
+
+   
     
     
 }

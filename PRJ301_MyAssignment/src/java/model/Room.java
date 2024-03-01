@@ -10,15 +10,15 @@ package model;
  */
 public class Room {
     private String id;
-    private String name;
+    private int number;
     private Building building;
 
     public Room() {
     }
 
-    public Room(String id, String name, Building building) {
+    public Room(String id, int number, Building building) {
         this.id = id;
-        this.name = name;
+        this.number = number;
         this.building = building;
     }
 
@@ -30,12 +30,12 @@ public class Room {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getNumber() {
+        return number;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public Building getBuilding() {

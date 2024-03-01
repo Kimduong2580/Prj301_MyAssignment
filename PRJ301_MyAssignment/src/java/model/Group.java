@@ -28,10 +28,6 @@ public class Group {
         this.students = students;
     }
 
-   
-
-    
-
     public String getId() {
         return id;
     }
@@ -62,6 +58,14 @@ public class Group {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(ArrayList<Student> students) {
+        this.students = students;
     }
     
     
