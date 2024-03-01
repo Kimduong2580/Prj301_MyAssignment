@@ -111,7 +111,7 @@ public class SessionDBContext extends DBContext<Session> {
 
     public Session getT(String id) {
         Session s = new Session();
-        String sql = "select * from Session where sesid = ?";
+        String sql = "select * from Session s JOIN [Group] g on s.groupId = g.gid where sesid = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, id);
@@ -120,7 +120,9 @@ public class SessionDBContext extends DBContext<Session> {
                 s.setId(rs.getString("sesid"));
                 Group g = new Group();
                 g.setId(rs.getString("groupId"));
+                g.setName(rs.getString("gname"));
                 s.setGroup(g);
+                
 
                 Lecturer l = new Lecturer();
                 l.setId(rs.getString("lecturerId"));
