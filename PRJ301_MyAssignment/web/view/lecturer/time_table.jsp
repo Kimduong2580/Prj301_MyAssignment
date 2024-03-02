@@ -64,10 +64,10 @@
                                                 <a class="box_grey box" href="#">Meet URL</a>
                                                 <a class="box_blue box" href="#">-EduNext</a><br />
                                                 <c:if test="${ses.isTaken eq true}">
-                                                    (<span style="color: #009900"><a href="attendance?sid=${ses.id}">attended</a></span>)
+                                                    (<span style="color: #009900"><a href="view_attendance?sid=${ses.id}">view</a>)-(<a href="">edit</a></span>)
                                                 </c:if>
                                                 <c:if test="${ses.isTaken eq false}">
-                                                    (<span style="color: red">Absent</span>)
+                                                    (<span style="color: red"><a href="attendance?sid=${ses.id}">attended</a></span>)
                                                 </c:if>
 
                                                 <c:if test="${empty ses.isTaken}">

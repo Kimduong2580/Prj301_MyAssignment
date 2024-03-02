@@ -13,14 +13,14 @@ import java.util.Date;
 public class Attendance {
     private Session session;
     private Student student;
-    private boolean isPresent;
+    private Boolean isPresent;
     private String description;
     private Date datetime;
 
     public Attendance() {
     }
 
-    public Attendance(Session session, Student student, boolean isPresent, String description, Date datetime) {
+    public Attendance(Session session, Student student, Boolean isPresent, String description, Date datetime) {
         this.session = session;
         this.student = student;
         this.isPresent = isPresent;
@@ -44,13 +44,14 @@ public class Attendance {
         this.student = student;
     }
 
-    public boolean isIsPresent() {
+    public Boolean getIsPresent() {
         return isPresent;
     }
 
-    public void setIsPresent(boolean isPresent) {
+    public void setIsPresent(Boolean isPresent) {
         this.isPresent = isPresent;
     }
+
 
     public String getDescription() {
         return description;

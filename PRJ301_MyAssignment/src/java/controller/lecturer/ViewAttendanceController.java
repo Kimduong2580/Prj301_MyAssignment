@@ -13,7 +13,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import model.Attendance;
 import model.Session;
@@ -23,7 +22,7 @@ import model.Student;
  *
  * @author Nguyen Kim Duong
  */
-public class AttendanceController extends HttpServlet {
+public class ViewAttendanceController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +41,10 @@ public class AttendanceController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AttendanceController</title>");
+            out.println("<title>Servlet ViewAttendanceController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AttendanceController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ViewAttendanceController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,14 +63,20 @@ public class AttendanceController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String sessionId = request.getParameter("sid");
+        System.out.println(sessionId);
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
         EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
         ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
+//        System.out.println("Student:" +students.size());
         request.setAttribute("gname", session.getGroup().getName());
         request.setAttribute("students", students);
-
-        request.getRequestDispatcher("../view/lecturer/attendance.jsp").forward(request, response);
+        AttendanceDBContext attendanceDB = new AttendanceDBContext();
+        ArrayList<Attendance> attedances = attendanceDB.getListByStudentIdAndSessionId(sessionId);
+        System.out.println(attedances.size());
+        request.setAttribute("attendances", attedances);
+        
+        request.getRequestDispatcher("../view/lecturer/view_attendance.jsp").forward(request, response);
     }
 
     /**
@@ -85,24 +90,7 @@ public class AttendanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
-        SessionDBContext sessionDB = new SessionDBContext();
-        Session session = sessionDB.getSesionBysesId(sessionId);
-        EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
-        ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
         
-        //insert recored attendance
-        for (Student student : students) {
-            String raw_status = request.getParameter("attendance-" + student.getId());
-            Boolean status = raw_status==null?null:Boolean.parseBoolean(raw_status);
-            String comment = request.getParameter("description-" + student.getId());
-            AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            attendanceDB.insert(sessionId, student.getId(), status, comment);
-        }
-        //Update isTaken
-        sessionDB.updateIsTaken(sessionId);
-        
-        request.getRequestDispatcher("time_table").forward(request, response);
     }
 
     /**

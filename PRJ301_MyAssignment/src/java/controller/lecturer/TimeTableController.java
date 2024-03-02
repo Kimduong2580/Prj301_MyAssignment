@@ -82,6 +82,7 @@ public class TimeTableController extends HttpServlet {
         ArrayList<Session> sessions = sessionDB.getSessionByDate(Date.valueOf(firstDayOfWeek), Date.valueOf(lastDayOfWeek), null);
         System.out.println(sessions.size());
         request.setAttribute("sessions", sessions);
+        
         request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);
     }
 
@@ -99,7 +100,7 @@ public class TimeTableController extends HttpServlet {
         String raw_fromDate = request.getParameter("fromDate");
         String raw_toDate = request.getParameter("toDate");
         String lecturerId = request.getParameter("lid");
-        if(lecturerId.isEmpty()) {
+        if(lecturerId == null || lecturerId.isEmpty()) {
             lecturerId = null;
         }
         Date fromDate, toDate;

@@ -8,6 +8,14 @@
         <servlet-name>AttendanceLecturerController</servlet-name>
         <servlet-class>controller.lecturer.AttendanceController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewAttendanceLecturerController</servlet-name>
+        <servlet-class>controller.lecturer.ViewAttendanceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAttendanceLecturerController</servlet-name>
+        <servlet-class>controller.lecturer.UpdateAttendanceController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TimeTableController</servlet-name>
         <url-pattern>/lecturer/time_table</url-pattern>
@@ -15,5 +23,13 @@
     <servlet-mapping>
         <servlet-name>AttendanceLecturerController</servlet-name>
         <url-pattern>/lecturer/attendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAttendanceLecturerController</servlet-name>
+        <url-pattern>/lecturer/view_attendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAttendanceLecturerController</servlet-name>
+        <url-pattern>/lecturer/update_attendance</url-pattern>
     </servlet-mapping>
 </web-app>

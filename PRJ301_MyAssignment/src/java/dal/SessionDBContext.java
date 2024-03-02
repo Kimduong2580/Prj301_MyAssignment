@@ -29,8 +29,8 @@ public class SessionDBContext extends DBContext<Session> {
         SessionDBContext db = new SessionDBContext();
         ArrayList<Session> list = db.getSessionByDate(Date.valueOf("2024-2-26"), Date.valueOf("2024-3-3"), null);
         System.out.println(list.size());
-        
-        Session s = db.getT("s31");
+
+        Session s = db.getSesionBysesId("s104");
         System.out.println(s.getGroup().getId());
     }
 
@@ -109,7 +109,7 @@ public class SessionDBContext extends DBContext<Session> {
         return sessions;
     }
 
-    public Session getT(String id) {
+    public Session getSesionBysesId(String id) {
         Session s = new Session();
         String sql = "select * from Session s JOIN [Group] g on s.groupId = g.gid where sesid = ?";
         try {
@@ -122,7 +122,6 @@ public class SessionDBContext extends DBContext<Session> {
                 g.setId(rs.getString("groupId"));
                 g.setName(rs.getString("gname"));
                 s.setGroup(g);
-                
 
                 Lecturer l = new Lecturer();
                 l.setId(rs.getString("lecturerId"));
@@ -145,6 +144,19 @@ public class SessionDBContext extends DBContext<Session> {
         }
 
         return s;
+    }
+
+    public void updateIsTaken(String sessionId) {
+        String sql = "UPDATE [dbo].[Session]\n"
+                + "   SET [isTaken] = 1\n"
+                + " WHERE sesid = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, sessionId);
+            stm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

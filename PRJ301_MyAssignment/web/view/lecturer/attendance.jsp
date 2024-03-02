@@ -40,15 +40,17 @@
 
                         </td>
                         <td>
-                            Attendance<input id="btnGetCurrentDateTime" type="radio" value="present" name="attendance-${student.id}"/>
-                            Absent<input  type="radio" value="absent" name="attendance-${student.id}"/>
+                            Attendance<input type="radio" value="true" name="attendance-${student.id}"/>
+                            Absent<input  type="radio" value="false" name="attendance-${student.id}"/>
                         </td>
                         <td>
-                            <input type="text" name="comment-${student.id}"/>
+                            <input type="text" name="description-${student.id}"/>
                         </td>
                     </tr>
                 </c:forEach>
             </table>
+            <input type="hidden" value="${param['sid']}" name="sid"/>
+            
             <input type="submit" value="save"/>
         </form>
     </body>
