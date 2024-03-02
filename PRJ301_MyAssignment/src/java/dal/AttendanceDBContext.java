@@ -24,6 +24,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
         AttendanceDBContext attendanceDB = new AttendanceDBContext();
         ArrayList<Attendance> list = attendanceDB.getListByStudentIdAndSessionId("s33");
         System.out.println(list.get(0).getDescription());
+        attendanceDB.update("s33", "HE171819", false, "abcd");
     }
 
     public void insert(String sessionId, String studentId, Boolean isPresent, String description) {
@@ -59,29 +60,49 @@ public class AttendanceDBContext extends DBContext<Attendance> {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, sessionId);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Attendance att = new Attendance();
                 Session session = new Session();
                 session.setId(sessionId);
                 att.setSession(session);
-                
+
                 Student student = new Student();
                 student.setId(rs.getString("studentId"));
                 att.setStudent(student);
-                if(rs.wasNull()) {
+                if (rs.wasNull()) {
                     att.setIsPresent(null);
-                }else {
+                } else {
                     Boolean isPresent = rs.getBoolean("isPresent");
                     att.setIsPresent(isPresent);
                 }
                 att.setDescription(rs.getString("description"));
                 list.add(att);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
+    }
+
+    public void update(String sessionId, String studentId, Boolean isPresent, String desciption) {
+        String sql = "UPDATE [dbo].[Attendance]\n"
+                + "   SET \n"
+                + "      [isPresent] = ?\n"
+                + "      ,[description] = ?\n"
+                + "      ,[dateTime] = GETDATE()\n"
+                + " WHERE studentId = ? and sessionId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setBoolean(1, isPresent);
+            stm.setString(2, desciption);
+            stm.setString(3, studentId);
+            stm.setString(4, sessionId);
+            stm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override

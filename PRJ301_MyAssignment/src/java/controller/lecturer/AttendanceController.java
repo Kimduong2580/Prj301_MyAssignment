@@ -14,10 +14,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import model.Attendance;
 import model.Session;
 import model.Student;
+import java.sql.Date;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.util.Calendar;
 
 /**
  *
@@ -66,12 +71,25 @@ public class AttendanceController extends HttpServlet {
         String sessionId = request.getParameter("sid");
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
+        // Lấy ngày hiện tại
+        Calendar currentDate = Calendar.getInstance();
+        // Lấy ngày của phiên
+        Calendar sessionDate = Calendar.getInstance();
+        sessionDate.setTime(session.getDate());
+
+        //Compare current date with session date, if more than 2 return time-table 
+        if (currentDate.after(sessionDate)) {
+            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
+        } else {
+        System.out.println("1234");
         EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
         ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
         request.setAttribute("gname", session.getGroup().getName());
         request.setAttribute("students", students);
 
         request.getRequestDispatcher("../view/lecturer/attendance.jsp").forward(request, response);
+        }
+
     }
 
     /**
@@ -88,20 +106,20 @@ public class AttendanceController extends HttpServlet {
         String sessionId = request.getParameter("sid");
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
+
         EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
         ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
-        
+
         //insert recored attendance
         for (Student student : students) {
             String raw_status = request.getParameter("attendance-" + student.getId());
-            Boolean status = raw_status==null?null:Boolean.parseBoolean(raw_status);
+            Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
             String comment = request.getParameter("description-" + student.getId());
             AttendanceDBContext attendanceDB = new AttendanceDBContext();
             attendanceDB.insert(sessionId, student.getId(), status, comment);
         }
         //Update isTaken
         sessionDB.updateIsTaken(sessionId);
-        
         request.getRequestDispatcher("time_table").forward(request, response);
     }
 
