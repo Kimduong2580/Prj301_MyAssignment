@@ -5,7 +5,7 @@
 
 package controller.lecturer;
 
-import dal.EnrollmentDBContext;
+import dal.StudentDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -57,8 +57,8 @@ public class ListStudentController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String gid = request.getParameter("gid");
-        EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
-        ArrayList<Student> students = enrollmentDB.listStudentBygId(gid);
+        StudentDBContext studentDB = new StudentDBContext();
+        ArrayList<Student> students = studentDB.listStudentBygId(gid);
 //        System.out.println(students.size());
         request.setAttribute("students", students);
         request.getRequestDispatcher("../view/lecturer/list_student.jsp").forward(request, response);

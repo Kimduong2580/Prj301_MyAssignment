@@ -5,7 +5,7 @@
 package controller.lecturer;
 
 import dal.AttendanceDBContext;
-import dal.EnrollmentDBContext;
+import dal.StudentDBContext;
 import dal.SessionDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -81,8 +81,8 @@ public class AttendanceController extends HttpServlet {
         if (currentDate.after(sessionDate)) {
             request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
         } else {
-        EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
-        ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
+        StudentDBContext studentDB = new StudentDBContext();
+        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
         request.setAttribute("gname", session.getGroup().getName());
         request.setAttribute("students", students);
 
@@ -106,8 +106,8 @@ public class AttendanceController extends HttpServlet {
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
 
-        EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
-        ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
+        StudentDBContext studentDB = new StudentDBContext();
+        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
 
         //insert recored attendance
         for (Student student : students) {

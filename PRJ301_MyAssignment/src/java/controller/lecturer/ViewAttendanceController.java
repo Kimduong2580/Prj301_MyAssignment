@@ -5,7 +5,7 @@
 package controller.lecturer;
 
 import dal.AttendanceDBContext;
-import dal.EnrollmentDBContext;
+import dal.StudentDBContext;
 import dal.SessionDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,8 +66,8 @@ public class ViewAttendanceController extends HttpServlet {
         System.out.println(sessionId);
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
-        EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
-        ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
+        StudentDBContext studentDB = new StudentDBContext();
+        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
 //        System.out.println("Student:" +students.size());
         request.setAttribute("gname", session.getGroup().getName());
         request.setAttribute("students", students);
