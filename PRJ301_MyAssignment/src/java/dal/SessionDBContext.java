@@ -27,14 +27,89 @@ public class SessionDBContext extends DBContext<Session> {
 
     public static void main(String[] args) {
         SessionDBContext db = new SessionDBContext();
-        ArrayList<Session> list = db.getSessionByDate(Date.valueOf("2024-2-26"), Date.valueOf("2024-3-3"), null);
+        ArrayList<Session> list = db.getSessionByDateAndStudentId(Date.valueOf("2024-2-26"), Date.valueOf("2024-3-3"), "HE171819");
         System.out.println(list.size());
 
         Session s = db.getSesionBysesId("s104");
         System.out.println(s.getGroup().getId());
     }
 
-    public ArrayList<Session> getSessionByDate(Date fromDate, Date toDate, String lid) {
+    public ArrayList<Session> getSessionByDateAndStudentId(Date fromDate, Date toDate, String studentId) {
+        ArrayList<Session> sessions = new ArrayList<>();
+        String sql = "SELECT s.sesid, s.groupId, s.lecturerId, s.roomId, s.timeId, s.date as sessionDate, s.isTaken, \n"
+                + "		g.gname as gname, g.subjectId,\n"
+                + "		l.lid as lecturerId, l.lname as lname, l.sex,\n"
+                + "		r.number, r.buildingId,\n"
+                + "		sub.subname as subName, sub.credit,\n"
+                + "		t.timeBegin, t.timeEnd\n"
+                + "FROM [Session] AS s INNER JOIN\n"
+                + "                 \n"
+                + "                  [Group] AS g ON s.groupId = g.gid INNER JOIN\n"
+                + "                  Lecturer AS l ON s.lecturerId = l.lid AND g.lid = l.lid INNER JOIN\n"
+                + "                  Room AS r ON s.roomId = r.rid INNER JOIN\n"
+                + "                  Subject AS sub ON g.subjectId = sub.subid INNER JOIN\n"
+                + "                  Time_slot AS t ON s.timeId = t.tid where date >= ? \n"
+                + "                  and date <= ? and g.gid IN \n"
+                + "                  (select e.gid from Enrollment e JOIN [Group] g \n"
+                + "                 ON e.gid = g.gid Where e.sid = ?)";
+
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setDate(1, fromDate);
+            stm.setDate(2, toDate);
+            stm.setString(3, studentId);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session s = new Session();
+
+                s.setId(rs.getString("sesid"));
+
+                Group g = new Group();
+                g.setId(rs.getString("groupId"));
+                g.setName(rs.getString("gname"));
+                Subject sub = new Subject();
+                sub.setId(rs.getString("subjectId"));
+                g.setSubject(sub);
+
+                Lecturer lecturer = new Lecturer();
+                lecturer.setId(rs.getString("lecturerId"));
+                lecturer.setName(rs.getString("lname"));
+                lecturer.setSex(rs.getBoolean("sex"));
+                g.setLecturer(lecturer);
+
+                Room r = new Room();
+                r.setId(rs.getString("roomId"));
+                r.setNumber(rs.getInt("number"));
+                Building b = new Building();
+                b.setId(rs.getString("buildingId"));
+                r.setBuilding(b);
+
+                Time_slot t = new Time_slot();
+                t.setId(rs.getString("timeId"));
+                t.setTimeBegin(rs.getString("timeBegin"));
+                t.setTimeEnd(rs.getString("timeEnd"));
+                Boolean isTaken = rs.getBoolean("isTaken");
+                s.setDate(rs.getDate("sessionDate"));
+                if (rs.wasNull()) {
+                    s.setIsTaken(null);
+                } else {
+                    s.setIsTaken(isTaken);
+                }
+                s.setGroup(g);
+                s.setLecturer(lecturer);
+                s.setRoom(r);
+                s.setTime_slot(t);
+                sessions.add(s);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return sessions;
+    }
+
+    public ArrayList<Session> getSessionByDateAndLecturerId(Date fromDate, Date toDate, String lid) {
         ArrayList<Session> sessions = new ArrayList<>();
         String sql = "SELECT s.sesid, s.groupId, s.lecturerId, s.roomId, s.timeId, s.date as sessionDate, s.isTaken, \n"
                 + "		g.gname as gname, g.subjectId,\n"

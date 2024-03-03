@@ -22,7 +22,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
 
     public static void main(String[] args) {
         AttendanceDBContext attendanceDB = new AttendanceDBContext();
-        ArrayList<Attendance> list = attendanceDB.getListByStudentIdAndSessionId("s33");
+        ArrayList<Attendance> list = attendanceDB.getAttendancesBySessionId("s33");
         System.out.println(list.get(0).getDescription());
         attendanceDB.update("s33", "HE171819", false, "abcd");
     }
@@ -52,8 +52,37 @@ public class AttendanceDBContext extends DBContext<Attendance> {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public Attendance getAttendanceBySessionIdAndStudentId(String sessionId, String studentId) {
+        Attendance att = new Attendance();
+        String sql = "select * from Attendance a where s.sesid = ? and studentId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, sessionId);
+            stm.setString(2, studentId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session session = new Session();
+                session.setId(sessionId);
+                att.setSession(session);
 
-    public ArrayList<Attendance> getListByStudentIdAndSessionId(String sessionId) {
+                Student student = new Student();
+                student.setId(rs.getString("studentId"));
+                att.setStudent(student);
+                if (rs.wasNull()) {
+                    att.setIsPresent(null);
+                } else {
+                    Boolean isPresent = rs.getBoolean("isPresent");
+                    att.setIsPresent(isPresent);
+                }
+                att.setDescription(rs.getString("description"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return att;
+    }
+    
+    public ArrayList<Attendance> getAttendancesBySessionId(String sessionId) {
         ArrayList<Attendance> list = new ArrayList<>();
         String sql = "select * from Attendance a JOIN Session s ON a.sessionId = s.sesid where s.sesid = ?";
         try {

@@ -83,8 +83,8 @@ public class UpdateAttendanceController extends HttpServlet {
             request.setAttribute("gname", session.getGroup().getName());
             request.setAttribute("students", students);
             AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            ArrayList<Attendance> attedances = attendanceDB.getListByStudentIdAndSessionId(sessionId);
-            System.out.println(attedances.size());
+            ArrayList<Attendance> attedances = attendanceDB.getAttendancesBySessionId(sessionId);
+//            System.out.println(attedances.size());
             request.setAttribute("attendances", attedances);
 
             request.getRequestDispatcher("../view/lecturer/update_attendance.jsp").forward(request, response);

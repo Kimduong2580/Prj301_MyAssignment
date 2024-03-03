@@ -2,58 +2,58 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.lecturer;
 
-import dal.AttendanceDBContext;
-import dal.StudentDBContext;
+package controller.student;
+
 import dal.SessionDBContext;
+import dal.Time_slotDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import model.Attendance;
 import model.Session;
-import model.Student;
+import util.DateHelper;
+import java.sql.Date;
+import model.Time_slot;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class ViewAttendanceController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+public class TimeTableController extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewAttendanceController</title>");
+            out.println("<title>Servlet TimeTableController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewAttendanceController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet TimeTableController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -61,27 +61,32 @@ public class ViewAttendanceController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
-        System.out.println(sessionId);
-        SessionDBContext sessionDB = new SessionDBContext();
-        Session session = sessionDB.getSesionBysesId(sessionId);
-        StudentDBContext studentDB = new StudentDBContext();
-        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
-//        System.out.println("Student:" +students.size());
-        request.setAttribute("gname", session.getGroup().getName());
-        request.setAttribute("students", students);
-        AttendanceDBContext attendanceDB = new AttendanceDBContext();
-        ArrayList<Attendance> attedances = attendanceDB.getAttendancesBySessionId(sessionId);
-//        System.out.println(attedances.size());
-        request.setAttribute("attendances", attedances);
+    throws ServletException, IOException {
+        String studentId = request.getParameter("sid");
+        LocalDate currentDate = LocalDate.now();
+        LocalDate firstDayInWeek = currentDate.with(DayOfWeek.MONDAY);
+        LocalDate lastDayInWeek = currentDate.with(DayOfWeek.SUNDAY);
+        request.setAttribute("fromDate", firstDayInWeek);
+        request.setAttribute("toDate", lastDayInWeek);
         
-        request.getRequestDispatcher("../view/lecturer/view_attendance.jsp").forward(request, response);
-    }
+        ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(firstDayInWeek, lastDayInWeek);
+        ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(firstDayInWeek, lastDayInWeek);
+        request.setAttribute("listDatesInWeek", listDatesInWeek);
+        request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
+        
+        Time_slotDBContext timeDB = new Time_slotDBContext();
+        ArrayList<Time_slot> times = timeDB.list();
+        request.setAttribute("times", times);
+        
+        SessionDBContext sessionDB = new SessionDBContext();
+        ArrayList<Session> sessions = sessionDB.getSessionByDateAndStudentId(Date.valueOf(firstDayInWeek), Date.valueOf(lastDayInWeek), "HE171819");
+        request.setAttribute("sessions", sessions);
+        
+        request.getRequestDispatcher("../view/student/time_table.jsp").forward(request, response);
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -89,13 +94,12 @@ public class ViewAttendanceController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+    throws ServletException, IOException {
+        processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

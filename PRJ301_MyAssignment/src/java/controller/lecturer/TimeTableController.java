@@ -79,7 +79,7 @@ public class TimeTableController extends HttpServlet {
         request.setAttribute("times", times);
 
         SessionDBContext sessionDB = new SessionDBContext();
-        ArrayList<Session> sessions = sessionDB.getSessionByDate(Date.valueOf(firstDayOfWeek), Date.valueOf(lastDayOfWeek), null);
+        ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(firstDayOfWeek), Date.valueOf(lastDayOfWeek), null);
 //        System.out.println(sessions.size());
         request.setAttribute("sessions", sessions);
         
@@ -131,7 +131,7 @@ public class TimeTableController extends HttpServlet {
         request.setAttribute("times", times);
 
         SessionDBContext sessionDB = new SessionDBContext();
-        ArrayList<Session> sessions = sessionDB.getSessionByDate(fromDate, toDate, lecturerId);
+        ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(fromDate, toDate, lecturerId);
         request.setAttribute("lid", lecturerId);
         request.setAttribute("sessions", sessions);
         request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);
