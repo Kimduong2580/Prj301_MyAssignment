@@ -16,6 +16,7 @@
         <form action="update_attendance" method="post">
             <table border="1px solid black">
                 <tr>
+                    <th>No</th>
                     <th>Group</th>
                     <th>Code</th>
                     <th>Name</th>
@@ -23,10 +24,12 @@
                     <th>Status</th>
                     <th>Comment</th>
                 </tr>
+                <c:set value="1" var="index"/>
                 <c:forEach items="${requestScope.students}" var="student">
                     <c:forEach items="${requestScope.attendances}" var="att">
                         <c:if test="${student.id eq att.student.id}">
                             <tr>
+                                <td>${index}</td>
                                 <td>
                                     ${requestScope.gname}
                                 </td>
@@ -53,6 +56,7 @@
                                 </td>
 
                             </tr>
+                            <c:set value="${index + 1}" var="index"/>
                         </c:if>
 
                     </c:forEach>

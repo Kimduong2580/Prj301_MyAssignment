@@ -59,7 +59,7 @@ public class ListStudentController extends HttpServlet {
         String gid = request.getParameter("gid");
         EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
         ArrayList<Student> students = enrollmentDB.listStudentBygId(gid);
-        System.out.println(students.size());
+//        System.out.println(students.size());
         request.setAttribute("students", students);
         request.getRequestDispatcher("../view/lecturer/list_student.jsp").forward(request, response);
     } 

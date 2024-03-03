@@ -81,7 +81,6 @@ public class AttendanceController extends HttpServlet {
         if (currentDate.after(sessionDate)) {
             request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
         } else {
-        System.out.println("1234");
         EnrollmentDBContext enrollmentDB = new EnrollmentDBContext();
         ArrayList<Student> students = enrollmentDB.listStudentBygId(session.getGroup().getId());
         request.setAttribute("gname", session.getGroup().getName());

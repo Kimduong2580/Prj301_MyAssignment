@@ -5,12 +5,19 @@
 
 package controller.lecturer;
 
+import dal.AcademicRecordDBContext;
+import dal.RegistrationDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import model.AcademicRecord;
+import model.AverageMark;
+import model.Registration;
+import util.CalculatorAverageMark;
 
 /**
  *
@@ -53,6 +60,19 @@ public class ViewGradeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        String studentId = request.getParameter("sid");
+        RegistrationDBContext registrationDB = new RegistrationDBContext();
+        ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentId(studentId);
+//        System.out.println("regis: " + registrations.size());
+        AcademicRecordDBContext academicDB = new AcademicRecordDBContext();
+        ArrayList<AcademicRecord> academicRecords = academicDB.getAcademicRecordByStudentId(studentId);
+//        System.out.println("academic: " + academicRecords.size());
+        ArrayList<AverageMark> avgMarks = new CalculatorAverageMark().list(academicRecords, registrations);
+        
+//        System.out.println("avgs:" + avgs.size());
+        
+        request.setAttribute("avgMarks", avgMarks);
+        request.setAttribute("registrations", registrations);
         request.getRequestDispatcher("../view/lecturer/view_grade.jsp").forward(request, response);
     } 
 

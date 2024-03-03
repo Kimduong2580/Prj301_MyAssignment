@@ -13,6 +13,7 @@ import model.Student;
  */
 public class StudentDBContext extends DBContext<Student>{
     
+    
 
     @Override
     public ArrayList<Student> list() {

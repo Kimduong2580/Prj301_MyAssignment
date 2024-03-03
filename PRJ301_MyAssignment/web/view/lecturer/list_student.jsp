@@ -21,7 +21,7 @@
                 <th>Code</th>
                 <th>Name</th>
             </tr>
-            <c:set var="index" value="0"/>
+            <c:set var="index" value="1"/>
             <c:forEach items="${requestScope.students}" var="s">
                 <tr>
                     <td>${index}</td>

@@ -80,7 +80,7 @@ public class TimeTableController extends HttpServlet {
 
         SessionDBContext sessionDB = new SessionDBContext();
         ArrayList<Session> sessions = sessionDB.getSessionByDate(Date.valueOf(firstDayOfWeek), Date.valueOf(lastDayOfWeek), null);
-        System.out.println(sessions.size());
+//        System.out.println(sessions.size());
         request.setAttribute("sessions", sessions);
         
         request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);

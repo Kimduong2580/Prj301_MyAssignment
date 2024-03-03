@@ -73,7 +73,7 @@ public class ViewAttendanceController extends HttpServlet {
         request.setAttribute("students", students);
         AttendanceDBContext attendanceDB = new AttendanceDBContext();
         ArrayList<Attendance> attedances = attendanceDB.getListByStudentIdAndSessionId(sessionId);
-        System.out.println(attedances.size());
+//        System.out.println(attedances.size());
         request.setAttribute("attendances", attedances);
         
         request.getRequestDispatcher("../view/lecturer/view_attendance.jsp").forward(request, response);
