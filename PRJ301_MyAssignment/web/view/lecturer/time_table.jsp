@@ -58,7 +58,7 @@
                                     <c:if test="${time.id.trim() eq sesTime.trim()}">
                                         <c:if test="${date.toString() eq ses.date.toString().trim()}">
                                             <span>
-                                                <span style="color: rgb(38, 85, 204)"><a href="#">${ses.group.subject.id}</a>-</span>
+                                                <span style="color: rgb(38, 85, 204)"><a href="list_student?gid=${ses.group.id}">${ses.group.subject.id}</a>-</span>
                                                 <a class="box_orange box" href="#">View Materials</a><br />
                                                 <span>at ${ses.room.building.id}-${ses.room.number} - </span>
                                                 <a class="box_grey box" href="#">Meet URL</a>
