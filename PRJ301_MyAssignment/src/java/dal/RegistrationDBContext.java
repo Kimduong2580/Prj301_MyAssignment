@@ -25,10 +25,48 @@ public class RegistrationDBContext extends DBContext<Registration> {
 
     public static void main(String[] args) {
         RegistrationDBContext reDB = new RegistrationDBContext();
-        ArrayList<Registration> list = reDB.getRegistrationByStudentId("HE171819");
+        ArrayList<Registration> list = reDB.getRegistrationByStudentIdAndSemesterId("HE171819", "fa23");
         System.out.println(list.size());
     }
 
+    public ArrayList<Registration> getRegistrationByStudentIdAndSemesterId(String studentId, String semesterId) {
+        ArrayList<Registration> registrations = new ArrayList<>();
+        String sql = "select * from Registration r JOIN Semester s ON r.semesterId = s.seId \n"
+                + "JOIN Subject sub ON sub.subid = r.subjectId JOIN [Group] g ON g.gid = r.groupId \n"
+                + "Where r.studentId = ? and r.semesterId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, studentId);
+            stm.setString(2, semesterId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Registration regis = new Registration();
+                
+                Subject sub = new Subject();
+                sub.setName(rs.getString("subname"));
+                sub.setId(rs.getString("subjectId"));
+                sub.setCredit(rs.getInt("credit"));
+                regis.setSubject(sub);
+
+                Semester se = new Semester();
+                se.setId(rs.getString("semesterId"));
+                se.setName(rs.getString("sename"));
+                se.setYear(rs.getInt("year"));
+                regis.setSemester(se);
+                
+                Group g = new Group();
+                g.setId(rs.getString("groupId"));
+                g.setName(rs.getString("gname"));
+                
+                registrations.add(regis);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistrationDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return registrations;
+    }
+    
     public ArrayList<Registration> getRegistrationByStudentId(String studentId) {
         ArrayList<Registration> registrations = new ArrayList<>();
         String sql = "select * from Registration r \n"
