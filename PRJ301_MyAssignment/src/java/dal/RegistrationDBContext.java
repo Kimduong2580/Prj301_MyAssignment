@@ -26,7 +26,7 @@ public class RegistrationDBContext extends DBContext<Registration> {
     public static void main(String[] args) {
         RegistrationDBContext reDB = new RegistrationDBContext();
         ArrayList<Registration> list = reDB.getRegistrationByStudentIdAndSemesterId("HE171819", "fa23");
-        System.out.println(list.size());
+        System.out.println(list.get(0).getGroup().getName());
     }
 
     public ArrayList<Registration> getRegistrationByStudentIdAndSemesterId(String studentId, String semesterId) {
@@ -57,6 +57,7 @@ public class RegistrationDBContext extends DBContext<Registration> {
                 Group g = new Group();
                 g.setId(rs.getString("groupId"));
                 g.setName(rs.getString("gname"));
+                regis.setGroup(g);
                 
                 registrations.add(regis);
             }

@@ -38,7 +38,7 @@ public class AcademicRecordDBContext extends DBContext<AcademicRecord> {
                 + "Exam e ON e.assessmentId = ass.assid \n"
                 + "JOIN Grade g ON g.examId = e.eid \n"
                 + "JOIN Student s ON g.studentId = s.sid \n"
-                + "JOIN Registration r ON r.studentId = s.sid and r.subjectId = ass.subjectId\n"
+                + "JOIN Registration r ON r.studentId = s.sid and r.subjectId = ass.subjectId and r.semesterId = g.semesterId\n"
                 + "WHERE s.sid = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
