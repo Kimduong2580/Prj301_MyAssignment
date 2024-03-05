@@ -40,7 +40,7 @@
                             ${student.name}
                         </td>
                         <td>
-
+                            <img width="15%" src="../view/image/${student.avatar}" alt=".." />
                         </td>
                         <td>
                             Attendance<input type="radio" value="true" name="attendance-${student.id}"/>

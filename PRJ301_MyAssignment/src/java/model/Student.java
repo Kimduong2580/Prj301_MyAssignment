@@ -15,6 +15,7 @@ public class Student {
     private String name;
     private boolean sex;
     private ArrayList<Group> groups;
+    private String avatar;
 
     public Student() {
     }
@@ -56,6 +57,14 @@ public class Student {
 
     public void setGroups(ArrayList<Group> groups) {
         this.groups = groups;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
     
 }

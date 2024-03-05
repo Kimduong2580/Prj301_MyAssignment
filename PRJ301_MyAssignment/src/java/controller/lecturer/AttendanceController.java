@@ -108,7 +108,8 @@ public class AttendanceController extends HttpServlet {
 
         StudentDBContext studentDB = new StudentDBContext();
         ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
-
+        System.out.println(students.get(0).getAvatar());
+        
         //insert recored attendance
         for (Student student : students) {
             String raw_status = request.getParameter("attendance-" + student.getId());

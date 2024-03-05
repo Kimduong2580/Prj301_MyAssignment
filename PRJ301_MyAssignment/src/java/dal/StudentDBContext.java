@@ -20,12 +20,12 @@ public class StudentDBContext extends DBContext<Student>{
     public static void main(String[] args) {
         StudentDBContext db = new StudentDBContext();
         ArrayList<Student> list = db.listStudentBygId("g1");
-        System.out.println(list.size());
+        System.out.println(list.get(0).getAvatar());
     }
     
     public ArrayList<Student> listStudentBygId(String gId) {
         ArrayList<Student> students = new ArrayList<>();
-        String sql = "select s.sid, s.name, s.sex, e.gid from Enrollment e JOIN Student s ON e.sid = s.sid where gid = ?";
+        String sql = "select s.sid, s.name, s.sex, s.avatar, e.gid from Enrollment e JOIN Student s ON e.sid = s.sid where gid = ?";
         try {
             PreparedStatement stm =  connection.prepareStatement(sql);
             stm.setString(1, gId);
@@ -34,6 +34,7 @@ public class StudentDBContext extends DBContext<Student>{
                 Student s = new Student();
                 s.setId(rs.getString("sid"));
                 s.setName(rs.getString("name"));
+                s.setAvatar(rs.getString("avatar"));
                 s.setSex(rs.getBoolean("sex"));
                 students.add(s);
             }

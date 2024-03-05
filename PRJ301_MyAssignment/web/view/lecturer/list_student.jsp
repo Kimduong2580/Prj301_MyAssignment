@@ -27,7 +27,7 @@
                     <td>${index}</td>
                     <c:set var="index" value="${index + 1}"/>
                     <td>
-                        
+                        <img width="15%" src="../view/image/${s.avatar}" alt=".." />
                     </td>
                     <td>
                         <a href="view_grade?sid=${s.id}">View grade</a>
@@ -35,7 +35,7 @@
                     <td>${s.id}</td>
                     <td>${s.name}</td>
                 </tr>
-                
+
             </c:forEach>
         </table>
     </body>
