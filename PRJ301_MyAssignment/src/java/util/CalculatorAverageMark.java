@@ -38,7 +38,6 @@ public class CalculatorAverageMark {
 
         DecimalFormat format = new DecimalFormat("#.##");
         avg = Double.parseDouble(format.format(avg));
-        
         return avg;
     }
 

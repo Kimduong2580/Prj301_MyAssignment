@@ -35,7 +35,7 @@
                 <c:forEach items="${requestScope.registrations}" var="re">
                     <tr>
                         <td>
-                            <a href="view_grade?sid=${param.sid}&seid=${param.seid}&subid=${re.subject.id}">${re.subject.name}(${re.subject.id})(${re.group.name})</a>
+                            <a href="view_grade?sid=${param.sid}&seid=${re.semester.id}&subid=${re.subject.id}">${re.subject.name}(${re.subject.id})(${re.group.name})</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -67,9 +67,9 @@
                             ${gs.assessment.name}
                         </td>
                         <td>${gs.assessment.weight}%</td>
-                        <c:set var="weight" value="${gs.assessment.weight}"/>
+                        <c:set var="weight" value="${gs.assessment.weight + weight}"/>
                         <td>${gs.grade.score}</td>
-                        <c:set var="score" value="${gs.grade.score}"/>
+                        <c:set var="score" value="${(gs.grade.score * gs.assessment.weight/100.0 + score)}"/>
 
                         <td></td>
                     </tr>
@@ -79,7 +79,7 @@
             <tr>
                 <td>Total</td>
                 <td>${weight}%</td>
-                <td>${score}</td>
+                <td>${score/(weight/100.0)}</td>
                 <td></td>
             </tr>
             </tr>

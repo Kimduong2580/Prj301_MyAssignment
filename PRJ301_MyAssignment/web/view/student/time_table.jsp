@@ -28,6 +28,7 @@
                         <form id="form" action="time_table" method="post">
                             <input type="date" name="fromDate" value="${requestScope.fromDate}" onchange="submitForm()">
                             To: <input type="date" name="toDate" value="${requestScope.toDate}" onchange="submitForm()"/><br>
+                            <input type="hidden" name="sid" value="${param.sid}"/>
                             <input type="submit" value="SEND">
                         </form>
                     </th>
@@ -51,29 +52,29 @@
                         </td>
                         <c:forEach items="${requestScope.listDatesInWeek}" var="date">
                             <td class="scheduling">
-                                <c:forEach items="${requestScope.sessions}" var="ses">
-                                    <c:set value="${ses.time_slot.id.trim()}" var="sesTime"/>
+                                <c:forEach items="${requestScope.attendanceRecords}" var="attr">
+                                    <c:set value="${attr.session.time_slot.id.trim()}" var="sesTime"/>
                                     <c:if test="${time.id.trim() eq sesTime.trim()}">
-                                        <c:if test="${date.toString() eq ses.date.toString().trim()}">
+                                        <c:if test="${date.toString() eq attr.session.date.toString().trim()}">
                                             <span>
-                                                <span style="color: rgb(38, 85, 204)"><a href="list_student?gid=${ses.group.id}">${ses.group.subject.id}</a>-</span>
+                                                <span style="color: rgb(38, 85, 204)"><a href="#">${attr.session.group.subject.id}</a>-</span>
                                                 <a class="box_orange box" href="#">View Materials</a><br />
-                                                <span>at ${ses.room.building.id}-${ses.room.number} - </span>
+                                                <span>at ${attr.session.room.building.id}-${attr.session.room.number} - </span>
                                                 <a class="box_grey box" href="#">Meet URL</a>
                                                 <a class="box_blue box" href="#">-EduNext</a><br />
                                                 
-                                                <c:if test="${ses.isTaken eq true}">
+                                                <c:if test="${attr.attendance.isPresent eq true}">
                                                     (<span style="color: #009900">Attendance</span>)
                                                 </c:if>
-                                                <c:if test="${ses.isTaken eq false}">
+                                                <c:if test="${attr.attendance.isPresent eq false}">
                                                     (<span style="color: red">Absent</span>)
                                                 </c:if>
 
-                                                <c:if test="${empty ses.isTaken}">
+                                                <c:if test="${empty attr.attendance.isPresent}">
                                                     (<span style="color: red">Not yet</span>)
                                                 </c:if>
                                                 <br/>
-                                                <span class="box_green box">(${ses.time_slot.timeBegin} - ${ses.time_slot.timeEnd})</span>
+                                                <span class="box_green box">(${attr.session.time_slot.timeBegin} - ${attr.session.time_slot.timeEnd})</span>
                                             </span>
                                         </c:if>
                                     </c:if>
