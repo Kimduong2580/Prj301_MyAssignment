@@ -4,6 +4,7 @@
  */
 package controller.student;
 
+import controller.authentication.BaseRequiredAuthenticationController;
 import dal.AttendanceRecordDBContext;
 import dal.SessionDBContext;
 import dal.Time_slotDBContext;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import model.Session;
 import util.DateHelper;
 import java.sql.Date;
+import model.Account;
 import model.AttendanceRecord;
 import model.Time_slot;
 
@@ -26,7 +28,7 @@ import model.Time_slot;
  *
  * @author Nguyen Kim Duong
  */
-public class TimeTableController extends HttpServlet {
+public class TimeTableController extends BaseRequiredAuthenticationController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +39,7 @@ public class TimeTableController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -64,30 +66,38 @@ public class TimeTableController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
-        String studentId = request.getParameter("sid");
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayInWeek = currentDate.with(DayOfWeek.MONDAY);
-        LocalDate lastDayInWeek = currentDate.with(DayOfWeek.SUNDAY);
-        request.setAttribute("fromDate", firstDayInWeek);
-        request.setAttribute("toDate", lastDayInWeek);
+        PrintWriter out = response.getWriter();
+        if (account.getStudent() == null) {
+            out.print("access denied");
+        } else {
+            String displayName = account.getDisplayName();
+            request.setAttribute("displayName", displayName);
+            String studentId;
+            studentId = account.getStudent().getId();
+            LocalDate currentDate = LocalDate.now();
+            LocalDate firstDayInWeek = currentDate.with(DayOfWeek.MONDAY);
+            LocalDate lastDayInWeek = currentDate.with(DayOfWeek.SUNDAY);
+            request.setAttribute("fromDate", firstDayInWeek);
+            request.setAttribute("toDate", lastDayInWeek);
 
-        ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(firstDayInWeek, lastDayInWeek);
-        ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(firstDayInWeek, lastDayInWeek);
-        request.setAttribute("listDatesInWeek", listDatesInWeek);
-        request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
+            ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(firstDayInWeek, lastDayInWeek);
+            ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(firstDayInWeek, lastDayInWeek);
+            request.setAttribute("listDatesInWeek", listDatesInWeek);
+            request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
 
-        Time_slotDBContext timeDB = new Time_slotDBContext();
-        ArrayList<Time_slot> times = timeDB.list();
-        request.setAttribute("times", times);
+            Time_slotDBContext timeDB = new Time_slotDBContext();
+            ArrayList<Time_slot> times = timeDB.list();
+            request.setAttribute("times", times);
 
-        AttendanceRecordDBContext attendanceRecordDB = new AttendanceRecordDBContext();
-        ArrayList<AttendanceRecord> attendanceRecords = attendanceRecordDB.getAttendanceRecordsBysIdAndFromDateAndToDate(studentId, Date.valueOf(firstDayInWeek), Date.valueOf(lastDayInWeek));
-        System.out.println(attendanceRecords.size());
-        request.setAttribute("attendanceRecords", attendanceRecords);
-        
-        request.getRequestDispatcher("../view/student/time_table.jsp").forward(request, response);
+            AttendanceRecordDBContext attendanceRecordDB = new AttendanceRecordDBContext();
+            ArrayList<AttendanceRecord> attendanceRecords = attendanceRecordDB.getAttendanceRecordsBysIdAndFromDateAndToDate(studentId, Date.valueOf(firstDayInWeek), Date.valueOf(lastDayInWeek));
+            System.out.println(attendanceRecords.size());
+            request.setAttribute("attendanceRecords", attendanceRecords);
+
+            request.getRequestDispatcher("../view/student/time_table.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -99,33 +109,38 @@ public class TimeTableController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
-        String studentId = request.getParameter("sid");
-        String raw_fromDate = request.getParameter("fromDate");
-        String raw_toDate = request.getParameter("toDate");
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayInWeek = currentDate.with(DayOfWeek.MONDAY);
-        LocalDate lastDayInWeek = currentDate.with(DayOfWeek.SUNDAY);
-        Date fromDate = raw_fromDate == null ? Date.valueOf(firstDayInWeek) : Date.valueOf(raw_fromDate);
+        PrintWriter out = response.getWriter();
+        if (account.getStudent() == null) {
+            out.print("access denied");
+        } else {
+            String studentId = account.getStudent().getId();
+            String raw_fromDate = request.getParameter("fromDate");
+            String raw_toDate = request.getParameter("toDate");
+            LocalDate currentDate = LocalDate.now();
+            LocalDate firstDayInWeek = currentDate.with(DayOfWeek.MONDAY);
+            LocalDate lastDayInWeek = currentDate.with(DayOfWeek.SUNDAY);
+            Date fromDate = raw_fromDate == null ? Date.valueOf(firstDayInWeek) : Date.valueOf(raw_fromDate);
 
-        Date toDate = raw_toDate == null ? Date.valueOf(lastDayInWeek) : Date.valueOf(raw_toDate);
-        request.setAttribute("fromDate", fromDate);
-        request.setAttribute("toDate", toDate);
-        ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
-        ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
-        request.setAttribute("listDatesInWeek", listDatesInWeek);
-        request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
+            Date toDate = raw_toDate == null ? Date.valueOf(lastDayInWeek) : Date.valueOf(raw_toDate);
+            request.setAttribute("fromDate", fromDate);
+            request.setAttribute("toDate", toDate);
+            ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
+            ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
+            request.setAttribute("listDatesInWeek", listDatesInWeek);
+            request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
 
-        Time_slotDBContext timeDB = new Time_slotDBContext();
-        ArrayList<Time_slot> times = timeDB.list();
-        request.setAttribute("times", times);
+            Time_slotDBContext timeDB = new Time_slotDBContext();
+            ArrayList<Time_slot> times = timeDB.list();
+            request.setAttribute("times", times);
 
-        AttendanceRecordDBContext attendanceRecordDB = new AttendanceRecordDBContext();
-        ArrayList<AttendanceRecord> attendanceRecords = attendanceRecordDB.getAttendanceRecordsBysIdAndFromDateAndToDate(studentId, fromDate, toDate);
-        request.setAttribute("attendanceRecords", attendanceRecords);
+            AttendanceRecordDBContext attendanceRecordDB = new AttendanceRecordDBContext();
+            ArrayList<AttendanceRecord> attendanceRecords = attendanceRecordDB.getAttendanceRecordsBysIdAndFromDateAndToDate(studentId, fromDate, toDate);
+            request.setAttribute("attendanceRecords", attendanceRecords);
 
-        request.getRequestDispatcher("../view/student/time_table.jsp").forward(request, response);
+            request.getRequestDispatcher("../view/student/time_table.jsp").forward(request, response);
+        }
     }
 
     /**

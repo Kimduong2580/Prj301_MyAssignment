@@ -14,7 +14,7 @@
     </head>
     <body>
         
-        <form id="form" action="time_table" method="post">
+        <form id="form" action="time_table" method="get">
             
         </form>
         <script>

@@ -1,0 +1,68 @@
+#login_ot {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#select_campus {
+    height: 30px;
+    margin: 0 10px;
+}
+
+.login_pass {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-orange {
+    border: none;
+    background-color: rgb(248, 157, 71);
+    color: whitesmoke;
+}
+
+table {
+    border: 1px solid rgba(14, 14, 14, 0.09);
+    border-collapse: collapse;
+  }
+/* 
+#table_content th,td {
+    border: 1px solid rgb(255, 255, 255);
+    border: 1px solid #00000034;
+} */
+  
+body a {
+    text-decoration: none;
+}
+
+h1 {
+    padding: 20px 0px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#intro_app {
+    color: rgb(255, 38, 0);
+}
+
+nav {
+    background-color: rgb(225, 222, 222);
+    padding: 10px;
+    border-radius: 3px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#input_pass {
+    margin-left: 5px;
+}
+
+#footer {
+    display: block;
+    text-align: center;
+    clear: both;
+    text-align: center;
+    
+}

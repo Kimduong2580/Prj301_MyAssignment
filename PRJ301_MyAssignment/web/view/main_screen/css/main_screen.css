@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#table_time {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#table_time td {
+    border: 1px solid rgba(211, 211, 211, 0.763);
+    border-bottom: 1px solid #00000034;
+
+}
+th {
+    border: 1px solid rgb(255, 255, 255);
+
+}
+
+body a {
+    text-decoration: none;
+}
+
+h1 {
+    padding: 20px 0px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#intro_app {
+    color: rgb(255, 38, 0);
+}
+
+nav {
+    background-color: rgb(225, 222, 222);
+    padding: 5px;
+    border-radius: 3px;
+    margin-top: 5px;
+    display: flex !important;
+    justify-content: space-between;
+}
+
+.box_green {
+    background-color: rgb(53, 169, 53);
+    padding: 2px;
+    border-radius: 3px;
+    color: rgba(240, 248, 255, 0.952);
+}
+
+.box_orange {
+    font-size: 85%;
+    background-color: rgb(232, 126, 60);
+    padding: 3px;
+    border-radius: 3px;
+    color: rgba(240, 248, 255, 0.952);
+    opacity: 0.85;
+}
+
+.box_grey {
+    font-size: 85%;
+    background-color: rgb(158, 158, 158);
+    padding: 3px;
+    border-radius: 3px;
+    color: rgba(240, 248, 255, 0.952);
+    opacity: 0.85;
+}
+.box_blue {
+    font-size: 85%;
+    background-color: rgb(32, 98, 184);
+    padding: 3px;
+    border-radius: 3px;
+    color: rgba(240, 248, 255, 0.952);
+    opacity: 0.85;
+}
+.box:hover {
+    opacity: 1;
+}
+.box_hover:hover {
+    background-color: rgb(57, 166, 57);
+}
+
+.link_hover:hover {
+    text-decoration: underline;
+}
+
+#content, #note {
+    margin: 0px 10px;
+}
+
+/*#note_detail {
+    line-height: 8px;
+}*/
+
+th, tbody {
+
+    padding: 5px;
+    font-size: 80%;
+}
+tbody td{
+    padding-left: 10px;
+}
+.scheduling {
+    padding: 5px;
+    line-height: 19px;
+}
+a:hover {
+    color: black !important;
+    text-decoration: underline;
+}
+
+#footer {
+    text-align: center;
+}
+
+.container {
+    width: 90%; /* Example: 90% width */
+    margin: 0 auto; /* Center the container */
+}
+
+.column {
+    width: 100%; /* Example: 100% width */
+}
+/* Styles for small screens (e.g., smartphones) */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%; /* Take up full width */
+    }
+
+    /* Adjust padding, margins, and font sizes */
+    header {
+        padding: 10px;
+    }
+
+    nav {
+        flex-direction: column; /* Stack navigation links vertically */
+    }
+
+    .box_green, .box_orange, .box_grey, .box_blue {
+        font-size: 0.8em; /* Reduce font size for buttons */
+    }
+
+    #footer {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    th, td {
+        padding: 8px;
+    }
+}
+

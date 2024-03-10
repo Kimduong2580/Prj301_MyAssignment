@@ -2,29 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.student;
+package controller.authentication;
 
-import controller.authentication.BaseRequiredAuthenticationController;
-import dal.AttendanceRecordDBContext;
-import dal.RegistrationDBContext;
-import dal.SemesterDBContext;
+import dal.AccountDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import jakarta.servlet.http.HttpSession;
 import model.Account;
-import model.AttendanceRecord;
-import model.Registration;
-import model.Semester;
+import model.Session;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class ViewAttendanceController extends BaseRequiredAuthenticationController {
+public class LoginController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +38,10 @@ public class ViewAttendanceController extends BaseRequiredAuthenticationControll
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewGradeController</title>");
+            out.println("<title>Servlet LoginController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewGradeController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet LoginController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,35 +57,9 @@ public class ViewAttendanceController extends BaseRequiredAuthenticationControll
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        if (account.getStudent() == null) {
-            out.print("access denied");
-        } else {
-
-            String studentId = account.getStudent().getId();
-            String semesterId = request.getParameter("seId");
-            String subjectId = request.getParameter("subid");
-
-            SemesterDBContext semesterDB = new SemesterDBContext();
-            ArrayList<Semester> semesters = semesterDB.list();
-            request.setAttribute("semesters", semesters);
-
-            semesterId = semesterId == null ? semesters.get(semesters.size() - 1).getId() : semesterId;
-            System.out.println(semesterId);
-
-            RegistrationDBContext registrationDB = new RegistrationDBContext();
-            ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentIdAndSemesterId(studentId, semesterId);
-            request.setAttribute("registrations", registrations);
-
-            subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
-            AttendanceRecordDBContext attrsDB = new AttendanceRecordDBContext();
-            ArrayList<AttendanceRecord> attrs = attrsDB.getAttendanceRecordsBysIdAndsubIdAndseId(studentId, subjectId, semesterId);
-            request.setAttribute("attrs", attrs);
-
-            request.getRequestDispatcher("../view/student/view_attendance.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("view/authentication/login/login.jsp").forward(request, response);
     }
 
     /**
@@ -102,9 +71,22 @@ public class ViewAttendanceController extends BaseRequiredAuthenticationControll
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        AccountDBContext accountDB = new AccountDBContext();
+        Account account = accountDB.getT(username, password);
+        PrintWriter out = response.getWriter();
+        System.out.println(account);
+        if (account != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("account", account);
+            request.getRequestDispatcher("mainScreen").forward(request, response);
+        } else {
+            out.print("access denied");
+        }
     }
 
     /**

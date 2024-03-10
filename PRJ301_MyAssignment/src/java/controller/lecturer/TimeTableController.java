@@ -4,6 +4,7 @@
  */
 package controller.lecturer;
 
+import controller.authentication.BaseRequiredAuthenticationController;
 import dal.SessionDBContext;
 import dal.Time_slotDBContext;
 import java.io.IOException;
@@ -19,38 +20,13 @@ import model.Session;
 import model.Time_slot;
 import util.DateHelper;
 import java.sql.Date;
+import model.Account;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class TimeTableController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet TimeTableController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet TimeTableController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+public class TimeTableController extends BaseRequiredAuthenticationController {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -62,28 +38,37 @@ public class TimeTableController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
-        LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
-        request.setAttribute("fromDate", firstDayOfWeek);
-        request.setAttribute("toDate", lastDayOfWeek);
-        ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(firstDayOfWeek, lastDayOfWeek);
-        ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(firstDayOfWeek, lastDayOfWeek);
-        
-        request.setAttribute("listDatesInWeek", listDatesInWeek);
-        request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
-        Time_slotDBContext timeDB = new Time_slotDBContext();
-        ArrayList<Time_slot> times = timeDB.list();
-        request.setAttribute("times", times);
+        PrintWriter out = response.getWriter();
+        if (account.getLecturer() == null) {
+            out.print("access denied");
+        } else {
+            String displayName = account.getDisplayName();
+            request.setAttribute("displayName", displayName);
+            String lecturerId;
+            lecturerId = account.getLecturer().getId();
+            LocalDate currentDate = LocalDate.now();
+            LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
+            LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
+            request.setAttribute("fromDate", firstDayOfWeek);
+            request.setAttribute("toDate", lastDayOfWeek);
+            ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(firstDayOfWeek, lastDayOfWeek);
+            ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(firstDayOfWeek, lastDayOfWeek);
 
-        SessionDBContext sessionDB = new SessionDBContext();
-        ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(firstDayOfWeek), Date.valueOf(lastDayOfWeek), null);
+            request.setAttribute("listDatesInWeek", listDatesInWeek);
+            request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
+            Time_slotDBContext timeDB = new Time_slotDBContext();
+            ArrayList<Time_slot> times = timeDB.list();
+            request.setAttribute("times", times);
+
+            SessionDBContext sessionDB = new SessionDBContext();
+            ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(firstDayOfWeek), Date.valueOf(lastDayOfWeek), lecturerId);
 //        System.out.println(sessions.size());
-        request.setAttribute("sessions", sessions);
-        
-        request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);
+            request.setAttribute("sessions", sessions);
+
+            request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -95,13 +80,13 @@ public class TimeTableController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
         String raw_fromDate = request.getParameter("fromDate");
         String raw_toDate = request.getParameter("toDate");
-        String lecturerId = request.getParameter("lid");
-        if(lecturerId == null || lecturerId.isEmpty()) {
-            lecturerId = null;
+        String lecturerId = request.getParameter("lid").trim();
+        if (lecturerId == null || lecturerId.isEmpty()) {
+            lecturerId = account.getLecturer().getId();
         }
         Date fromDate, toDate;
         LocalDate currentDate = LocalDate.now();
@@ -109,21 +94,21 @@ public class TimeTableController extends HttpServlet {
         LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
         if (raw_fromDate == null) {
             fromDate = Date.valueOf(firstDayOfWeek);
-        }else {
+        } else {
             fromDate = Date.valueOf(raw_fromDate);
         }
-        if(raw_toDate == null) {
+        if (raw_toDate == null) {
             toDate = Date.valueOf(lastDayOfWeek);
-        }else {
+        } else {
             toDate = Date.valueOf(raw_toDate);
         }
-        
+
         request.setAttribute("fromDate", fromDate);
         request.setAttribute("toDate", toDate);
-        
+
         ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
         ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
-        
+
         request.setAttribute("listDatesInWeek", listDatesInWeek);
         request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
         Time_slotDBContext timeDB = new Time_slotDBContext();

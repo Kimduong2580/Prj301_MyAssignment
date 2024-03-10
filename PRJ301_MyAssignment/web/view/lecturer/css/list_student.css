@@ -50,31 +50,6 @@ nav {
     color: rgba(240, 248, 255, 0.952);
 }
 
-.box_orange {
-    font-size: 85%;
-    background-color: rgb(232, 126, 60);
-    padding: 3px;
-    border-radius: 3px;
-    color: rgba(240, 248, 255, 0.952);
-    opacity: 0.85;
-}
-
-.box_grey {
-    font-size: 85%;
-    background-color: rgb(158, 158, 158);
-    padding: 3px;
-    border-radius: 3px;
-    color: rgba(240, 248, 255, 0.952);
-    opacity: 0.85;
-}
-.box_blue {
-    font-size: 85%;
-    background-color: rgb(32, 98, 184);
-    padding: 3px;
-    border-radius: 3px;
-    color: rgba(240, 248, 255, 0.952);
-    opacity: 0.85;
-}
 .box:hover {
     opacity: 1;
 }
@@ -86,26 +61,14 @@ nav {
     text-decoration: underline;
 }
 
-#content, #note {
-    margin: 0px 10px;
-}
 
-#note_detail {
-    line-height: 8px;
-}
 
 th, tbody {
 
     padding: 5px;
     font-size: 80%;
 }
-tbody td{
-    padding-left: 10px;
-}
-.scheduling {
-    padding: 5px;
-    line-height: 19px;
-}
+
 a:hover {
     color: black !important;
     text-decoration: underline;
@@ -113,4 +76,16 @@ a:hover {
 
 #footer {
     text-align: center;
+}
+
+#header_table {
+    background-color: 	#99CCFF;
+}
+
+#list_student {
+    text-align: center
+}
+
+#list_student th {
+    font-size: 18px;
 }

@@ -22,7 +22,7 @@ public abstract class DBContext <T>{
     public Connection connection = null;
 
     public DBContext() {
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=Assignment_Prj301;user=duongnk;password=123456;encrypt=false;";
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=Assignment_Prj301;user=duongnk;password=12345678;encrypt=false;";
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url);

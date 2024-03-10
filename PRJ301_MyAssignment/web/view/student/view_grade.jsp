@@ -24,7 +24,7 @@
                 <c:forEach items="${requestScope.semesters}" var="se">
                     <tr>
                         <td>
-                            <a href="view_grade?sid=${param.sid}&seid=${se.id}">${se.name}${se.year}</a>
+                            <a href="view_grade?seid=${se.id}">${se.name}${se.year}</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -35,7 +35,7 @@
                 <c:forEach items="${requestScope.registrations}" var="re">
                     <tr>
                         <td>
-                            <a href="view_grade?sid=${param.sid}&seid=${re.semester.id}&subid=${re.subject.id}">${re.subject.name}(${re.subject.id})(${re.group.name})</a>
+                            <a href="view_grade?seid=${re.semester.id}&subid=${re.subject.id}">${re.subject.name}(${re.subject.id})(${re.group.name})</a>
                         </td>
                     </tr>
                 </c:forEach>
