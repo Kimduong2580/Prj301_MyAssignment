@@ -17,48 +17,104 @@
         <title>View grade</title>
     </head>
     <body>
-        
-        <table border="1px solid black">
-            <tr>
-                <th>NO</th>
-                <th>SUBJECT CODE</th>
-                <th>SUBJECT NAME</th>
-                <th>SEMESTER</th>
-                <th>GROUP</th>
-                <th>AVERAGE MARK</th>
-                <th>STATUS</th>
-            </tr>
-            <c:set value="1" var="index"/>
-            <c:forEach items="${requestScope.registrations}" var="r">
-                <tr>
-                    <td>
-                        ${index}
-                    </td>
-                    <c:set var="index" value="${index + 1}"/>
-                    <td>${r.subject.id}</td>
-                    <td>${r.subject.name}</td>
-                    <td>${r.semester.name}${r.semester.year}</td>
-                    <td>${r.group.name}</td>
-                    <c:set value="0" var="flag"/>
-                    <c:forEach items="${requestScope.avgMarks}" var="avg">
-                        <c:if test="${avg.registration.id eq r.id}">
-                            <td style="text-align: center">${avg.averageMark}</td>
-                            <c:if test="${avg.averageMark gt 5}">
-                                <td style="color: green">Passed</td>
-                            </c:if>
-                            <c:if test="${avg.averageMark lt 5}">
-                                <td style="color: red">Not Passed</td>
-                            </c:if>
-                            <c:set var="flag" value="${flag + 1}"/>
-                        </c:if>
-                    </c:forEach>
-                    <c:if test="${flag == 0}">
-                        <td style="text-align: center">-</td>
-                        <td>future</td>
-                    </c:if>           
-                </tr>
 
-            </c:forEach>
-        </table>
+
+
+        <div class="container">
+            <div id="header">
+                <header>
+                    <h1>FPT University Academic Portal</h1>
+                    <table width="40%">
+                        <tbody>
+                            <tr id="intro_app">
+                                <td colspan="2"><b>Fap mobile app (myFAP) is ready at</b></td>
+                            </tr>
+                            <tr id="img_app_fap">
+                                <td>
+                                    <img width="60%" src="../view/image/pngegg (1).png" alt="app store"/>
+                                </td>
+                                <td>
+                                    <img width="60%" src="../view/image/pngegg.png" alt="google play" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </header>
+            </div>
+            <div>
+                <nav>
+                    <div id="nav_lef">
+                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
+                            >Attendance detail</b>
+                    </div>
+
+                </nav>
+            </div>
+            <div id="content">
+                <table border="1px solid black">
+                    <tr>
+                        <th>NO</th>
+                        <th>SUBJECT CODE</th>
+                        <th>SUBJECT NAME</th>
+                        <th>SEMESTER</th>
+                        <th>GROUP</th>
+                        <th>AVERAGE MARK</th>
+                        <th>STATUS</th>
+                    </tr>
+                    <c:set value="1" var="index"/>
+                    <c:forEach items="${requestScope.registrations}" var="r">
+                        <tr>
+                            <td>
+                                ${index}
+                            </td>
+                            <c:set var="index" value="${index + 1}"/>
+                            <td>${r.subject.id}</td>
+                            <td>${r.subject.name}</td>
+                            <td>${r.semester.name}${r.semester.year}</td>
+                            <td>${r.group.name}</td>
+                            <c:set value="0" var="flag"/>
+                            <c:forEach items="${requestScope.avgMarks}" var="avg">
+                                <c:if test="${avg.registration.id eq r.id}">
+                                    <td style="text-align: center">${avg.averageMark}</td>
+                                    <c:if test="${avg.averageMark gt 5}">
+                                        <td style="color: green">Passed</td>
+                                    </c:if>
+                                    <c:if test="${avg.averageMark lt 5}">
+                                        <td style="color: red">Not Passed</td>
+                                    </c:if>
+                                    <c:set var="flag" value="${flag + 1}"/>
+                                </c:if>
+                            </c:forEach>
+                            <c:if test="${flag == 0}">
+                                <td style="text-align: center">-</td>
+                                <td>future</td>
+                            </c:if>           
+                        </tr>
+
+                    </c:forEach>
+                </table>
+
+                <div id="footer">
+                    <div id="contact">
+                        <p>
+                            <span><b>Mọi góp ý, thắc mắc xin liên hệ: </b></span> Phòng dịch
+                            vụ sinh viên: Email:
+                            <a class="link_hover" href="#">dichvusinhvien@fe.edu.vn.</a> Điện
+                            thoại:
+                            <span><b>(024)7308.13.13</b></span>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            © Powered by FPT University |
+                            <span><a class="link_hover" href="#">FPT University</a></span> |
+                            <span><a class="link_hover" href="#">CMS</a></span> |
+                            <span><a class="link_hover" href="#">library</a></span> |
+                            <span><a class="link_hover" href="#">book24x7</a></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

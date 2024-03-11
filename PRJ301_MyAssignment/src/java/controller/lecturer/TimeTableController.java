@@ -82,44 +82,49 @@ public class TimeTableController extends BaseRequiredAuthenticationController {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
-        String raw_fromDate = request.getParameter("fromDate");
-        String raw_toDate = request.getParameter("toDate");
-        String lecturerId = request.getParameter("lid").trim();
-        if (lecturerId == null || lecturerId.isEmpty()) {
-            lecturerId = account.getLecturer().getId();
-        }
-        Date fromDate, toDate;
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
-        LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
-        if (raw_fromDate == null) {
-            fromDate = Date.valueOf(firstDayOfWeek);
+        PrintWriter out = response.getWriter();
+        if (account.getLecturer() == null) {
+            out.print("access denied");
         } else {
-            fromDate = Date.valueOf(raw_fromDate);
+            String raw_fromDate = request.getParameter("fromDate");
+            String raw_toDate = request.getParameter("toDate");
+            String lecturerId = account.getLecturer().getId();
+            if (lecturerId == null || lecturerId.isEmpty()) {
+                lecturerId = account.getLecturer().getId();
+            }
+            Date fromDate, toDate;
+            LocalDate currentDate = LocalDate.now();
+            LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
+            LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
+            if (raw_fromDate == null) {
+                fromDate = Date.valueOf(firstDayOfWeek);
+            } else {
+                fromDate = Date.valueOf(raw_fromDate);
+            }
+            if (raw_toDate == null) {
+                toDate = Date.valueOf(lastDayOfWeek);
+            } else {
+                toDate = Date.valueOf(raw_toDate);
+            }
+
+            request.setAttribute("fromDate", fromDate);
+            request.setAttribute("toDate", toDate);
+
+            ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
+            ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
+
+            request.setAttribute("listDatesInWeek", listDatesInWeek);
+            request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
+            Time_slotDBContext timeDB = new Time_slotDBContext();
+            ArrayList<Time_slot> times = timeDB.list();
+            request.setAttribute("times", times);
+
+            SessionDBContext sessionDB = new SessionDBContext();
+            ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(fromDate, toDate, lecturerId);
+            request.setAttribute("lid", lecturerId);
+            request.setAttribute("sessions", sessions);
+            request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);
         }
-        if (raw_toDate == null) {
-            toDate = Date.valueOf(lastDayOfWeek);
-        } else {
-            toDate = Date.valueOf(raw_toDate);
-        }
-
-        request.setAttribute("fromDate", fromDate);
-        request.setAttribute("toDate", toDate);
-
-        ArrayList<String> listDatesInWeek = DateHelper.getDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
-        ArrayList<String> listNameDatesInWeek = DateHelper.getNameDatesInWeek(fromDate.toLocalDate(), toDate.toLocalDate());
-
-        request.setAttribute("listDatesInWeek", listDatesInWeek);
-        request.setAttribute("listNameDatesInWeek", listNameDatesInWeek);
-        Time_slotDBContext timeDB = new Time_slotDBContext();
-        ArrayList<Time_slot> times = timeDB.list();
-        request.setAttribute("times", times);
-
-        SessionDBContext sessionDB = new SessionDBContext();
-        ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(fromDate, toDate, lecturerId);
-        request.setAttribute("lid", lecturerId);
-        request.setAttribute("sessions", sessions);
-        request.getRequestDispatcher("../view/lecturer/time_table.jsp").forward(request, response);
     }
 
     /**

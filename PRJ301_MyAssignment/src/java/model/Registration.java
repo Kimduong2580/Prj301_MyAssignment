@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
+import java.sql.Date;
 
 /**
  *
@@ -14,6 +15,10 @@ public class Registration {
     private Student student;
     private Semester semester;
     private Group group;
+    private double averageMark;
+    private Boolean status;
+    private Date dateBegin;
+    private Date dateEnd;
 
     public Registration() {
     }
@@ -65,6 +70,38 @@ public class Registration {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public double getAverageMark() {
+        return averageMark;
+    }
+
+    public void setAverageMark(double averageMark) {
+        this.averageMark = averageMark;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Date getDateBegin() {
+        return dateBegin;
+    }
+
+    public void setDateBegin(Date dateBegin) {
+        this.dateBegin = dateBegin;
+    }
+
+    public Date getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(Date dateEnd) {
+        this.dateEnd = dateEnd;
     }
     
     

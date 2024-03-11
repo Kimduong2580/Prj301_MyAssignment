@@ -57,28 +57,30 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
 
             RegistrationDBContext registrationDB = new RegistrationDBContext();
             ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentIdAndSemesterId(studentId, semesterId);
-            subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
-            request.setAttribute("registrations", registrations);
+            if (registrations.size() > 0) {
+                subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
+                request.setAttribute("registrations", registrations);
 
-            GradingSystemDBContext gsDB = new GradingSystemDBContext();
-            ArrayList<GradingSystem> gss = gsDB.getGradingSystemsBysidAndSubidAndSeId(studentId, semesterId, subjectId);
-            request.setAttribute("gss", gss);
+                GradingSystemDBContext gsDB = new GradingSystemDBContext();
+                ArrayList<GradingSystem> gss = gsDB.getGradingSystemsBysidAndSubidAndSeId(studentId, semesterId, subjectId);
+                request.setAttribute("gss", gss);
 
-            HashMap<String, Integer> categoryAss = new HashMap<>();
-            for (GradingSystem gs : gss) {
-                String category = gs.getAssessment().getCategory();
-                if (categoryAss.containsKey(category)) {
-                    categoryAss.put(category, categoryAss.get(category) + 1);
-                } else {
-                    categoryAss.put(category, 1);
+                HashMap<String, Integer> categoryAss = new HashMap<>();
+                for (GradingSystem gs : gss) {
+                    String category = gs.getAssessment().getCategory();
+                    if (categoryAss.containsKey(category)) {
+                        categoryAss.put(category, categoryAss.get(category) + 1);
+                    } else {
+                        categoryAss.put(category, 1);
+                    }
                 }
+                request.setAttribute("categoryAss", categoryAss);
+
+                double averageMark = new CalculatorAverageMark().getAverageMark(gss);
+                request.setAttribute("averageMark", averageMark);
             }
-            request.setAttribute("categoryAss", categoryAss);
-
-            double averageMark = new CalculatorAverageMark().getAverageMark(gss);
-            request.setAttribute("averageMark", averageMark);
-
             request.getRequestDispatcher("../view/student/view_grade.jsp").forward(request, response);
+
         }
     }
 
