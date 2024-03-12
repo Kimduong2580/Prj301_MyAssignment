@@ -62,7 +62,7 @@ public class ViewAttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
+        String sessionId = request.getParameter("seid");
         System.out.println(sessionId);
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);

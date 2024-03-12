@@ -68,7 +68,7 @@ public class AttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
+        String sessionId = request.getParameter("seid");
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
         // Lấy ngày hiện tại

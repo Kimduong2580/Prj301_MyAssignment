@@ -14,7 +14,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="../view/lecturer/css/list_student.css"/>
+        <link rel="stylesheet" href="../view/css/style.css"/>
         <title>List student</title>
     </head>
     <body>
@@ -56,57 +56,60 @@
             <hr>
             <div id="content">
                 <div id="list_student">
-                    <table border = "1px solid black">
-                        <tr id="header_table">
-                            <th style="width: 5%">Index</th>
-                            <th style="width: 10%">Image</th>
-                            <th>Member</th>
-                            <th>Sex</th>
-                            <th>Code</th>
-                            <th>Name</th>
-                        </tr>
-                        <c:set var="index" value="1"/>
-                        <c:forEach items="${requestScope.students}" var="s">
-                            <tr>
-                                <td>${index}</td>
-                                <c:set var="index" value="${index + 1}"/>
-                                <td>
-                                    <img width="100%" src="../view/image/${s.avatar}" alt=".." />
-                                </td>
-                                <td>
-                                    <a href="view_grade?sid=${s.id}">View grade</a>
-                                </td>
-                                <c:if test="${s.sex eq true}"><td>Male</td></c:if>
-                                <c:if test="${s.sex eq false}"><td>Female</td></c:if>
-                                <td>${s.id}</td>
-                                <td>${s.name}</td>
-                            </tr>
+                    <table class="content_table_1 content_table" border = "1px solid black">
+                        <thead id="header_table">
+                        <th style="width: 5%">Index</th>
+                        <th style="width: 10%">Image</th>
+                        <th>Member</th>
+                        <th>Sex</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        </thead>
+                        <tbody>
+                            <c:set var="index" value="1"/>
+                            <c:forEach items="${requestScope.students}" var="s">
+                                <tr>
+                                    <td>${index}</td>
+                                    <c:set var="index" value="${index + 1}"/>
+                                    <td>
+                                        <img width="100%" src="../view/image/${s.avatar}" alt=".." />
+                                    </td>
+                                    <td>
+                                        <a href="view_grade?sid=${s.id}">View grade</a>
+                                    </td>
+                                    <c:if test="${s.sex eq true}"><td>Male</td></c:if>
+                                    <c:if test="${s.sex eq false}"><td>Female</td></c:if>
+                                    <td>${s.id}</td>
+                                    <td>${s.name}</td>
+                                </tr>
 
-                        </c:forEach>
+                            </c:forEach>
+                        </tbody>
+
                     </table>
                 </div>
             </div>
-                        <br>
+            <br>
             <div id="footer">
-          <div id="contact">
-            <p>
-              <span><b>Mọi góp ý, thắc mắc xin liên hệ: </b></span> Phòng dịch
-              vụ sinh viên: Email:
-              <a class="link_hover" href="#">dichvusinhvien@fe.edu.vn.</a> Điện
-              thoại:
-              <span><b>(024)7308.13.13</b></span>
-            </p>
-          </div>
-          <div>
-            <p>
-              © Powered by FPT University |
-              <span><a class="link_hover" href="#">FPT University</a></span> |
-              <span><a class="link_hover" href="#">CMS</a></span> |
-              <span><a class="link_hover" href="#">library</a></span> |
-              <span><a class="link_hover" href="#">book24x7</a></span>
-            </p>
-          </div>
-        </div>            
+                <div id="contact">
+                    <p>
+                        <span><b>Mọi góp ý, thắc mắc xin liên hệ: </b></span> Phòng dịch
+                        vụ sinh viên: Email:
+                        <a class="link_hover" href="#">dichvusinhvien@fe.edu.vn.</a> Điện
+                        thoại:
+                        <span><b>(024)7308.13.13</b></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        © Powered by FPT University |
+                        <span><a class="link_hover" href="#">FPT University</a></span> |
+                        <span><a class="link_hover" href="#">CMS</a></span> |
+                        <span><a class="link_hover" href="#">library</a></span> |
+                        <span><a class="link_hover" href="#">book24x7</a></span>
+                    </p>
+                </div>
+            </div>            
         </div>
     </body>
 </html>

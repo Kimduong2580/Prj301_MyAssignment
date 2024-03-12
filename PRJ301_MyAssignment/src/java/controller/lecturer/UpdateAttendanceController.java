@@ -64,7 +64,7 @@ public class UpdateAttendanceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
+        String sessionId = request.getParameter("seid");
         System.out.println(sessionId);
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
@@ -75,9 +75,9 @@ public class UpdateAttendanceController extends HttpServlet {
         sessionDate.setTime(session.getDate());
 
         //Compare current date with session date, if more than 1 return time-table 
-        if (currentDate.after(sessionDate)) {
-            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
-        } else {
+//        if (currentDate.after(sessionDate)) {
+//            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
+//        } else {
             StudentDBContext studentDB = new StudentDBContext();
             ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
             request.setAttribute("gname", session.getGroup().getName());
@@ -88,7 +88,7 @@ public class UpdateAttendanceController extends HttpServlet {
             request.setAttribute("attendances", attedances);
 
             request.getRequestDispatcher("../view/lecturer/update_attendance.jsp").forward(request, response);
-        }
+//        }
     }
 
     /**
@@ -102,19 +102,20 @@ public class UpdateAttendanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
+        String sessionId = request.getParameter("seid");
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
         StudentDBContext studentDB = new StudentDBContext();
         ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
-
+//        System.out.println(students.size());
         //Update recoreds attendance
         for (Student student : students) {
             String raw_status = request.getParameter("attendance-" + student.getId());
             Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
+            System.out.println("status: " + status);
             String description = request.getParameter("description-" + student.getId());
             AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            attendanceDB.update(sessionId, student.getId(), status, description);
+//            attendanceDB.update(sessionId, student.getId(), status, description);
         }
         request.getRequestDispatcher("time_table").forward(request, response);
 

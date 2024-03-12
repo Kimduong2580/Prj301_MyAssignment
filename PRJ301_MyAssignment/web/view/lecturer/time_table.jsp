@@ -53,7 +53,7 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="#">Home</a>&nbsp;|&nbsp;<b
+                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
                             >User detail</b>
                     </div>
                     <div id="nav_right">
@@ -127,10 +127,10 @@
                                                             <a class="box_grey box" href="#">Meet URL</a>
                                                             <a class="box_blue box" href="#">-EduNext</a><br />
                                                             <c:if test="${ses.isTaken eq true}">
-                                                                (<span style="color: #009900"><a href="view_attendance?sid=${ses.id}">view</a>)-(<a href="update_attendance?sid=${ses.id}">edit</a></span>)
+                                                                (<span style="color: #009900"><a href="view_attendance?seid=${ses.id}">view</a>)-(<a href="update_attendance?seid=${ses.id}">edit</a></span>)
                                                             </c:if>
                                                             <c:if test="${ses.isTaken eq false}">
-                                                                (<span style="color: red"><a href="attendance?sid=${ses.id}">attended</a></span>)
+                                                                (<span style="color: red"><a href="attendance?seid=${ses.id}">attended</a></span>)
                                                             </c:if>
 
                                                             <c:if test="${empty ses.isTaken}">

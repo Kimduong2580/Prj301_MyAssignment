@@ -97,11 +97,9 @@ nav {
 th, tbody {
 
     padding: 5px;
-    font-size: 80%;
+    font-size: 70%;
 }
-tbody td{
-    padding-left: 10px;
-}
+
 .scheduling {
     padding: 5px;
     line-height: 19px;
@@ -113,4 +111,52 @@ a:hover {
 
 #footer {
     text-align: center;
+}
+
+.content_table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+}
+
+.content_table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    border: 1px solid #009879;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.content_table th {
+}
+
+
+.content_table td {
+    padding: 5px 5px;
+    font-size: 15px;
+}
+
+.content_table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content_table_1 tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content_table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.col-md-4, .col-md-8 {
+    padding: 0px;
+}
+
+
+.table_main {
+    margin-left: 40px;
 }

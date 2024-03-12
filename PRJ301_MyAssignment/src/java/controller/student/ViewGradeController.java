@@ -53,10 +53,11 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
             SemesterDBContext semesterDB = new SemesterDBContext();
             ArrayList<Semester> semesters = semesterDB.list();
             semesterId = (semesterId == null) ? semesters.get(semesters.size() - 1).getId() : semesterId;
+            request.setAttribute("semesterId", semesterId);
             request.setAttribute("semesters", semesters);
 
             RegistrationDBContext registrationDB = new RegistrationDBContext();
-            
+            request.setAttribute("account", account);
             //lay ds cac registration ma student hk trong semester
             ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentIdAndSemesterId(studentId, semesterId);
             if (registrations.size() > 0) {

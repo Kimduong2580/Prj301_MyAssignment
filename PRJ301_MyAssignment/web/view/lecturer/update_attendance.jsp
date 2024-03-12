@@ -16,7 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-        <link href="../view/lecturer/css/time_table.css" rel="stylesheet" type="text/css"/>
+        <link href="../view/css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="container">
@@ -51,55 +51,57 @@
             </div>
             <div id="content">
                 <form action="update_attendance" method="post">
-                    <table border="1px solid black">
-                        <tr>
-                            <th>No</th>
-                            <th>Group</th>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Status</th>
-                            <th>Comment</th>
-                        </tr>
-                        <c:set value="1" var="index"/>
-                        <c:forEach items="${requestScope.students}" var="student">
-                            <c:forEach items="${requestScope.attendances}" var="att">
-                                <c:if test="${student.id eq att.student.id}">
-                                    <tr>
-                                        <td>${index}</td>
-                                        <td>
-                                            ${requestScope.gname}
-                                        </td>
-                                        <td>
-                                            ${student.id}
-                                        </td>
-                                        <td>
-                                            ${student.name}
-                                        </td>
-                                        <td>
+                    <table class="content_table content_table_1" border="1px solid black">
+                        <thead>
+                        <th>No</th>
+                        <th>Group</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Status</th>
+                        <th>Comment</th>
+                        </thead>
+                        <tbody>
+                            <c:set value="1" var="index"/>
+                            <c:forEach items="${requestScope.students}" var="student">
+                                <c:forEach items="${requestScope.attendances}" var="att">
+                                    <c:if test="${student.id eq att.student.id}">
+                                        <tr>
+                                            <td>${index}</td>
+                                            <td>
+                                                ${requestScope.gname}
+                                            </td>
+                                            <td>
+                                                ${student.id}
+                                            </td>
+                                            <td>
+                                                ${student.name}
+                                            </td>
+                                            <td>
 
-                                        </td>
+                                            </td>
 
-                                        <td>
-                                            Attendance<input type="radio" value="true" 
-                                                             <c:if test="${att.isPresent eq true}">checked="checked"</c:if>
-                                                             name="attendance-${student.id}"/>
-                                            Absent<input  type="radio" value="false" 
-                                                          <c:if test="${att.isPresent eq false}">checked="checked"</c:if>
-                                                          name="attendance-${student.id}"/>
-                                        </td>
-                                        <td>
-                                            <input type="text" placeholder="${att.description}" value="${att.description}" name="description-${student.id}"/>
-                                        </td>
+                                            <td>
+                                                Attendance<input type="radio" value="true" 
+                                                                 <c:if test="${att.isPresent eq true}">checked="checked"</c:if>
+                                                                 name="attendance-${student.id}"/>
+                                                Absent<input  type="radio" value="false" 
+                                                              <c:if test="${att.isPresent eq false}">checked="checked"</c:if>
+                                                              name="attendance-${student.id}"/>
+                                            </td>
+                                            <td>
+                                                <input type="text" placeholder="${att.description}" value="${att.description}" name="description-${student.id}"/>
+                                            </td>
 
-                                    </tr>
-                                    <c:set value="${index + 1}" var="index"/>
-                                </c:if>
+                                        </tr>
+                                        <c:set value="${index + 1}" var="index"/>
+                                    </c:if>
 
+                                </c:forEach>
                             </c:forEach>
-                        </c:forEach>
+                        </tbody>
                     </table>
-                    <input type="hidden" value="${param['sid']}" name="sid"/>
+                    <input type="hidden" value="${param['seid']}" name="seid"/>
 
                     <input type="submit" value="UPDATE"/>
                 </form>

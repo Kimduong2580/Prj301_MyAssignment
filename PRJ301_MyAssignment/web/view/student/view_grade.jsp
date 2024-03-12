@@ -15,7 +15,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <link href="../view/lecturer/css/time_table.css" rel="stylesheet" type="text/css"/>
+        <link href="../view/css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
 
@@ -50,99 +50,111 @@
                 </nav>
             </div>
             <div id="content">
-                <table border="1px solid black">
-                    <thead>
-                    <th>Term</th>
-                    <th>Course</th>
-                    </thead>
-                    <tbody>
-                    <td>
-                        <table>
-                            <c:forEach items="${requestScope.semesters}" var="se">
-                                <tr>
-                                    <td>
-                                        <a href="view_grade?seid=${se.id}">${se.name}${se.year}</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
-                    </td>
-                    <td style="text-align: left; vertical-align: top;">
-                        <table>
-                            <c:forEach items="${requestScope.registrations}" var="re">
-                                <tr>
-                                    <td>
-                                        <a href="view_grade?seid=${re.semester.id}&subid=${re.subject.id}">${re.subject.name}(${re.subject.id})(${re.group.name})</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
-
-                    </td>
-                    </tbody>
-                </table>
-                <c:if test="${param.subid != null}">
-                    <table border="1px solid black">
-                        <thead>
-                        <th>Grade Category</th>
-                        <th>Grade Item</th>
-                        <th>Weight</th>
-                        <th>Value</th>
-                        <th>Comment</th>
-                        </thead>
-                        <tbody>
-                            <c:set var="category" value="${requestScope.categoryAss}"/>
-                            <c:forEach items="${category.keySet()}" var="ca">
-                                <tr>
-                                    <td rowspan="${categoryAss[ca] + 2}">${ca}</td>
-                                    <c:set var="weight" value="0"/>
-                                    <c:set var="score" value="0"/>
-                                    <c:forEach items="${requestScope.gss}" var="gs" >
-                                        <c:if test="${gs.assessment.category eq ca}">
+                <h3 style="text-align: center">Grade report for ${requestScope.account.displayName} (${requestScope.account.student.id})</h3>
+                <h6 style="text-align: center">Select a term, course ...</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="content_table content_table_1" border="1px solid black">
+                            <thead>
+                            <th>Term</th>
+                            <th>Course</th>
+                            </thead>
+                            <tbody>
+                            <td>
+                                <table class="content_table_1">
+                                    <c:forEach items="${requestScope.semesters}" var="se">
                                         <tr>
                                             <td>
-                                                ${gs.assessment.name}
+                                                <a href="view_grade?seid=${se.id}">${se.name}${se.year}</a>
                                             </td>
-                                            <td>${gs.assessment.weight}%</td>
-                                            <c:set var="weight" value="${gs.assessment.weight + weight}"/>
-                                            <td>${gs.grade.score}</td>
-                                            <c:set var="score" value="${(gs.grade.score * gs.assessment.weight/100.0 + score)}"/>
+                                        </tr>
+                                    </c:forEach>
+                                </table>
+                            </td>
+                            <td style="text-align: left; vertical-align: top;">
+                                <table>
+                                    <c:forEach items="${requestScope.registrations}" var="re">
+                                        <tr>
+                                            <td>
+                                                <a href="view_grade?seid=${re.semester.id}&subid=${re.subject.id}">${re.subject.name}(${re.subject.id})(${re.group.name}, ${re.dateBegin})</a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </table>
 
+                            </td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <c:if test="${param.subid != null}">
+                            <table class="content_table" border="1px solid black">
+                                <thead>
+                                <th>Grade Category</th>
+                                <th>Grade Item</th>
+                                <th>Weight</th>
+                                <th>Value</th>
+                                <th>Comment</th>
+                                </thead>
+                                <tbody>
+                                    <c:set var="category" value="${requestScope.categoryAss}"/>
+                                    <c:forEach items="${category.keySet()}" var="ca">
+                                        <tr>
+                                            <td rowspan="${categoryAss[ca] + 2}">${ca}</td>
+                                            <c:set var="weight" value="0"/>
+                                            <c:set var="score" value="0"/>
+                                            <c:forEach items="${requestScope.gss}" var="gs" >
+                                                <c:if test="${gs.assessment.category eq ca}">
+                                                <tr>
+                                                    <td>
+                                                        ${gs.assessment.name}
+                                                    </td>
+                                                    <td>${gs.assessment.weight}%</td>
+                                                    <c:set var="weight" value="${gs.assessment.weight + weight}"/>
+                                                    <td>${gs.grade.score}</td>
+                                                    <c:set var="score" value="${(gs.grade.score * gs.assessment.weight/100.0 + score)}"/>
+
+                                                    <td></td>
+                                                </tr>
+
+                                            </c:if>
+                                        </c:forEach>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td>${weight}%</td>
+                                            <td>${score/(weight/100.0)}</td>
                                             <td></td>
                                         </tr>
+                                        </tr>
+                                    </c:forEach>
+                                    <c:set value="${requestScope.registrationItem}" var="rItem"/>    
+                                    <tr>
+                                        <td colspan="2" style="font-weight: bold">COURSE TOTAl AVERAGE:</td>
+                                        <td colspan="3">${rItem.averageMark}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1"></td>
+                                        <td colspan="1">Status:</td>
 
-                                    </c:if>
-                                </c:forEach>
-                                <tr>
-                                    <td>Total</td>
-                                    <td>${weight}%</td>
-                                    <td>${score/(weight/100.0)}</td>
-                                    <td></td>
-                                </tr>
-                                </tr>
-                            </c:forEach>
-                            <c:set value="${requestScope.registrationItem}" var="rItem"/>    
-                            <tr>
-                                <td colspan="2">COURSE TOTAl AVERAGE:</td>
-                                <td colspan="3">${rItem.averageMark}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="1"></td>
-                                <td colspan="1">Status:</td>
+                                        <c:if test="${rItem.status eq false}">
+                                            <td colspan="3" style="color: red">Not pass</td>
+                                        </c:if>
+                                        <c:if test="${rItem.status eq true}">
+                                            <td colspan="3" style="color: green">Passed</td>
+                                        </c:if>
+                                        <c:if test="${rItem.status eq null}">
+                                            <td colspan="3" style="color: green">Studying</td>
+                                        </c:if>
+                                    </tr>
+                                </tbody>    
+                            </table>
+                        </c:if>    
 
-                                <c:if test="${rItem.status eq false}">
-                                    <td colspan="3" style="color: red">Not pass</td>
-                                </c:if>
-                                <c:if test="${rItem.status eq true}">
-                                    <td colspan="3" style="color: green">Passed</td>
-                                </c:if>
-                                <c:if test="${rItem.status eq null}">
-                                    <td colspan="3" style="color: green">Studying</td>
-                                </c:if>
-                            </tr>
-                        </tbody>    
-                    </table>
-                </c:if>    
+                    </div>
+                </div>
+
+
+
                 <div id="footer">
                     <div id="contact">
                         <p>

@@ -4,7 +4,6 @@
  */
 package controller.lecturer;
 
-import dal.AcademicRecordDBContext;
 import dal.RegistrationDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,10 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import model.AcademicRecord;
-import model.AverageMark;
 import model.Registration;
-import util.CalculatorAverageMark;
 
 /**
  *
@@ -66,11 +62,7 @@ public class ViewGradeController extends HttpServlet {
         RegistrationDBContext registrationDB = new RegistrationDBContext();
         ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentId(studentId);
 //        System.out.println("regis: " + registrations.size());
-        AcademicRecordDBContext academicDB = new AcademicRecordDBContext();
-        ArrayList<AcademicRecord> academicRecords = academicDB.getAcademicRecordByStudentId(studentId);
-//        System.out.println("academic: " + academicRecords.size());
 
-//        System.out.println("avgs:" + avgs.size());
         request.setAttribute("registrations", registrations);
         request.getRequestDispatcher("../view/lecturer/view_grade.jsp").forward(request, response);
     }

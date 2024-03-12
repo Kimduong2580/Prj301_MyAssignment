@@ -7,11 +7,8 @@ package util;
 import dal.GradingSystemDBContext;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import model.AcademicRecord;
 import model.Assessment;
-import model.AverageMark;
 import model.GradingSystem;
-import model.Registration;
 
 /**
  *

@@ -59,7 +59,15 @@
             </div>
             <div>
                 <nav>
-
+                    <div id="nav_lef">
+                        
+                    </div>
+                    <div id="nav_right">
+                        <a class="box_green box_hover" href="#">${requestScope.account.displayName}</a
+                        >&nbsp;|&nbsp;<a class="box_green box_hover" href="logout">logout</a
+                        >&nbsp;|&nbsp;
+                        <b class="box_green">CAMPUS: FPTU-Hòa Lạc</b>
+                    </div>
                 </nav>
             </div>
             <div id="content">
@@ -70,7 +78,7 @@
                 <a href="lecturer/view_grade">View grade</a>
 
             </div>
-            
+
             <div id="footer">
                 <div>
                     <p>

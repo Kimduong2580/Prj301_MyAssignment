@@ -16,7 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-        <link href="../view/lecturer/css/time_table.css" rel="stylesheet" type="text/css"/>
+        <link href="../view/css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="container">
@@ -46,54 +46,57 @@
                         <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
                             >Attendance detail</b>
                     </div>
-                    
+
                 </nav>
             </div>
             <div id="content">
-               
+
                 <div>
                     <form action="attendance" method="post">
-                        <table border="1px solid black">
-                            <tr>
-                                <th>No</th>
-                                <th>Group</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th style="width: 10%">Image</th>
-                                <th>Status</th>
-                                <th>Comment</th>
-                            </tr>
-                            <c:set value="1" var="index"/>
-                            <c:forEach items="${requestScope.students}" var="student">
+                        <table class="content_table content_table_1" border="1px solid black">
+                            <thead>
+                            <th>No</th>
+                            <th>Group</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th style="width: 10%">Image</th>
+                            <th>Status</th>
+                            <th>Comment</th>
+                            </thead>
+                            <tbody>
+                                <c:set value="1" var="index"/>
+                                <c:forEach items="${requestScope.students}" var="student">
 
-                                <tr>
-                                    <td>${index}</td>
-                                    <td>
-                                        ${requestScope.gname}
-                                    </td>
-                                    <td>
-                                        ${student.id}
-                                    </td>
-                                    <td>
-                                        ${student.name}
-                                    </td>
-                                    <td>
-                                        <img width="100%" src="../view/image/${student.avatar}" alt=".." />
-                                    </td>
-                                    <td>
-                                        Attendance<input type="radio" value="true" name="attendance-${student.id}"/>
-                                        Absent<input  type="radio" value="false" name="attendance-${student.id}"/>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="description-${student.id}"/>
-                                    </td>
-                                </tr>
-                                <c:set value="${index + 1}" var="index"/>
-                            </c:forEach>
+                                    <tr>
+                                        <td>${index}</td>
+                                        <td>
+                                            ${requestScope.gname}
+                                        </td>
+                                        <td>
+                                            ${student.id}
+                                        </td>
+                                        <td>
+                                            ${student.name}
+                                        </td>
+                                        <td>
+                                            <img width="100%" src="../view/image/${student.avatar}" alt=".." />
+                                        </td>
+                                        <td>
+                                            Attendance<input type="radio" value="true" name="attendance-${student.id}"/>
+                                            Absent<input  type="radio" value="false" name="attendance-${student.id}"/>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="description-${student.id}"/>
+                                        </td>
+                                    </tr>
+                                    <c:set value="${index + 1}" var="index"/>
+                                </c:forEach>
+                            </tbody>
+
                         </table>
-                        <input type="hidden" value="${param['sid']}" name="sid"/>
+                        <input type="hidden" value="${param['seid']}" name="seid"/>
 
-                        <input type="submit" value="save"/>
+                        <input type="submit" class="btn btn-primary" value="Save"/>
                     </form>
 
                 </div>
@@ -119,5 +122,6 @@
                 </div>
             </div>
         </div>
+
     </body>
 </html>

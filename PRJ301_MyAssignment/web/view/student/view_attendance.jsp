@@ -15,7 +15,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <link href="../view/lecturer/css/time_table.css" rel="stylesheet" type="text/css"/>
+        <link href="../view/css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
 
@@ -49,74 +49,79 @@
 
                 </nav>
             </div>
-            <div id="content">
-                <table border="1px solid black">
-                    <thead>
-                    <th>Campus/Program</th>
-                    <th>Term</th>
-                    <th>Course</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>FU-HL</td>
-                            <td>
-                                <div>
-                                    <table>
-                                        <c:forEach items="${requestScope.semesters}" var="se">
-                                            <tr><td><a href="view_attendance?seId=${se.id}">${se.name}${se.year}</a></td></tr>
-                                                </c:forEach>
-                                    </table>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <table>
-                                        <c:forEach items="${requestScope.registrations}" var="r">
-                                            <tr><td><a href="view_attendance?seId=${param.seId}&subid=${r.subject.id}">${r.subject.name}</a></td></tr>
-                                                </c:forEach>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table border="1px solid black">
-                    <thead>
-                    <th>No</th>
-                    <th>Date</th>
-                    <th>Slot</th>
-                    <th>Room</th>
-                    <th>Lecturer</th>
-                    <th>Group name</th>
-                    <th>Attendance status</th>
-                    <th>Lecturer Comment</th>
-                    </thead>
-                    <tbody>
-                        <c:set value="1" var="index"/>
-                        <c:forEach items="${requestScope.attrs}" var="attr">
+            <div id="content" class="row">
+                <div class="col-md-4">
+                    <table class="content_table content_table_1" border="1px solid black" >
+                        <thead>
+                        <th>Campus / Program</th>
+                        <th>Term</th>
+                        <th>Course</th>
+                        </thead>
+                        <tbody>
                             <tr>
-                                <td>${index}</td>
-                                <td>${attr.session.date}</td>
-                                <td>${attr.session.time_slot.id}(${attr.session.time_slot.timeBegin}-${attr.session.time_slot.timeEnd})</td>
-                                <td>${attr.session.room.building.id}-${attr.session.room.number}</td>
-                                <td>${attr.session.lecturer.id}</td>
-                                <td>${attr.session.group.name}</td>
-                                <c:if test="${attr.attendance.isPresent eq true}">
-                                    <td>Present</td>
-                                </c:if>
-                                <c:if test="${attr.attendance.isPresent eq false}">
-                                    <td>Absent</td>
-                                </c:if>
-                                <c:if test="${attr.attendance.isPresent eq null}">
-                                    <td>Future</td>
-                                </c:if>
-                                <td>${attr.attendance.description}</td>
-                                <c:set value="${index + 1}" var="index"/>
+                                <td style="text-align: left; vertical-align: top;">FU-HL</td>
+                                <td style="text-align: left; vertical-align: top;">
+                                    <div>
+                                        <table>
+                                            <c:forEach items="${requestScope.semesters}" var="se">
+                                                <tr><td><a href="view_attendance?seId=${se.id}">${se.name}${se.year}</a></td></tr>
+                                                    </c:forEach>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td style="text-align: left; vertical-align: top;">
+                                    <div>
+                                        <table>
+                                            <c:forEach items="${requestScope.registrations}" var="r">
+                                                <tr><td><a href="view_attendance?seId=${requestScope.semesterId}&subid=${r.subject.id}">${r.subject.name}(${r.subject.id})(${r.group.name}, ${r.dateBegin})</a></td></tr>
+                                            </c:forEach>
+                                        </table>
+                                    </div>
+                                </td>
                             </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-
+                        </tbody>
+                    </table>
+                </div>
+                <c:if test="${!(param.subid eq null)}" >
+                    <div class="col-md-8">
+                        <table class="content_table content_table_1 table_main" id="table_attendance" border="1px solid black">
+                            <thead>
+                            <th>No</th>
+                            <th>Date</th>
+                            <th>Slot</th>
+                            <th>Room</th>
+                            <th>Lecturer</th>
+                            <th>Group name</th>
+                            <th>Attendance status</th>
+                            <th>Lecturer Comment</th>
+                            </thead>
+                            <tbody>
+                                <c:set value="1" var="index"/>
+                                <c:forEach items="${requestScope.attrs}" var="attr">
+                                    <tr>
+                                        <td>${index}</td>
+                                        <td>${attr.session.date}</td>
+                                        <td>${attr.session.time_slot.id}(${attr.session.time_slot.timeBegin}-${attr.session.time_slot.timeEnd})</td>
+                                        <td>${attr.session.room.building.id}-${attr.session.room.number}</td>
+                                        <td>${attr.session.lecturer.id}</td>
+                                        <td>${attr.session.group.name}</td>
+                                        <c:if test="${attr.attendance.isPresent eq true}">
+                                            <td>Present</td>
+                                        </c:if>
+                                        <c:if test="${attr.attendance.isPresent eq false}">
+                                            <td>Absent</td>
+                                        </c:if>
+                                        <c:if test="${attr.attendance.isPresent eq null}">
+                                            <td>Future</td>
+                                        </c:if>
+                                        <td>${attr.attendance.description}</td>
+                                        <c:set value="${index + 1}" var="index"/>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:if>
                 <div id="footer">
                     <div id="contact">
                         <p>

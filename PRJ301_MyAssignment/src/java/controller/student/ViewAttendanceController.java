@@ -75,19 +75,23 @@ public class ViewAttendanceController extends BaseRequiredAuthenticationControll
 
             SemesterDBContext semesterDB = new SemesterDBContext();
             ArrayList<Semester> semesters = semesterDB.list();
-            request.setAttribute("semesters", semesters);
 
             semesterId = semesterId == null ? semesters.get(semesters.size() - 1).getId() : semesterId;
+            request.setAttribute("semesterId", semesterId);
+            request.setAttribute("semesters", semesters);
+
             System.out.println(semesterId);
 
             RegistrationDBContext registrationDB = new RegistrationDBContext();
             ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentIdAndSemesterId(studentId, semesterId);
-            request.setAttribute("registrations", registrations);
+            if (registrations.size() > 0) {
+                request.setAttribute("registrations", registrations);
 
-            subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
-            AttendanceRecordDBContext attrsDB = new AttendanceRecordDBContext();
-            ArrayList<AttendanceRecord> attrs = attrsDB.getAttendanceRecordsBysIdAndsubIdAndseId(studentId, subjectId, semesterId);
-            request.setAttribute("attrs", attrs);
+                subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
+                AttendanceRecordDBContext attrsDB = new AttendanceRecordDBContext();
+                ArrayList<AttendanceRecord> attrs = attrsDB.getAttendanceRecordsBysIdAndsubIdAndseId(studentId, subjectId, semesterId);
+                request.setAttribute("attrs", attrs);
+            }
 
             request.getRequestDispatcher("../view/student/view_attendance.jsp").forward(request, response);
         }
