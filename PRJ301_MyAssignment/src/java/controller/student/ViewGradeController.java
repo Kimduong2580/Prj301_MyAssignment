@@ -56,6 +56,8 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
             request.setAttribute("semesters", semesters);
 
             RegistrationDBContext registrationDB = new RegistrationDBContext();
+            
+            //lay ds cac registration ma student hk trong semester
             ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentIdAndSemesterId(studentId, semesterId);
             if (registrations.size() > 0) {
                 subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
@@ -76,8 +78,9 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
                 }
                 request.setAttribute("categoryAss", categoryAss);
 
-                double averageMark = new CalculatorAverageMark().getAverageMark(gss);
-                request.setAttribute("averageMark", averageMark);
+                Registration registrationItem = registrationDB.getT(studentId, semesterId, subjectId);
+                System.out.println(registrationItem.getAverageMark());
+                request.setAttribute("registrationItem", registrationItem);
             }
             request.getRequestDispatcher("../view/student/view_grade.jsp").forward(request, response);
 

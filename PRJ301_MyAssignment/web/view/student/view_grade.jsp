@@ -121,23 +121,25 @@
                                 </tr>
                                 </tr>
                             </c:forEach>
-                            <c:if test="${requestScope.averageMark gt -1}">
-                                <tr>
-                                    <td colspan="2">COURSE TOTAl AVERAGE:</td>
-                                    <td colspan="3">${requestScope.averageMark}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="1"></td>
-                                    <td colspan="1">Status:</td>
+                            <c:set value="${requestScope.registrationItem}" var="rItem"/>    
+                            <tr>
+                                <td colspan="2">COURSE TOTAl AVERAGE:</td>
+                                <td colspan="3">${rItem.averageMark}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1"></td>
+                                <td colspan="1">Status:</td>
 
-                                    <c:if test="${requestScope.averageMark lt 5}">
-                                        <td colspan="3" style="color: red">Not pass</td>
-                                    </c:if>
-                                    <c:if test="${requestScope.averageMark gt 5}">
-                                        <td colspan="3" style="color: green">Passed</td>
-                                    </c:if>
-                                </tr>
-                            </c:if> 
+                                <c:if test="${rItem.status eq false}">
+                                    <td colspan="3" style="color: red">Not pass</td>
+                                </c:if>
+                                <c:if test="${rItem.status eq true}">
+                                    <td colspan="3" style="color: green">Passed</td>
+                                </c:if>
+                                <c:if test="${rItem.status eq null}">
+                                    <td colspan="3" style="color: green">Studying</td>
+                                </c:if>
+                            </tr>
                         </tbody>    
                     </table>
                 </c:if>    

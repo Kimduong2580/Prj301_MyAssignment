@@ -28,7 +28,7 @@ public class CalculatorAverageMark {
     public double getAverageMark(ArrayList<GradingSystem> gradingSystem) {
         double avg = 0;
         if(gradingSystem.isEmpty()) {
-            avg = -1;
+            avg = 0;
         }
         for (GradingSystem g : gradingSystem) {
             Assessment ass = g.getGrade().getExam().getAssessment();
@@ -41,29 +41,5 @@ public class CalculatorAverageMark {
         return avg;
     }
 
-    public ArrayList<AverageMark> list(ArrayList<AcademicRecord> academicRecords, ArrayList<Registration> registrations) {
-        ArrayList<AverageMark> list = new ArrayList<>();
-        for (Registration r : registrations) {
-            int flag = 0;
-            double avg = 0;
-            for (AcademicRecord a : academicRecords) {
-                if (r.getId().equals(a.getRegistration().getId())) {
-                    flag = 1;
-                    Assessment ass = a.getGrade().getExam().getAssessment();
-                    double weight = (double) ass.getWeight() / 100;
-                    avg += weight * a.getGrade().getScore();
-                    System.out.println("weight: " + ass.getWeight());
-                }
-            }
-
-            if (flag == 1) {
-                DecimalFormat format = new DecimalFormat("#.##");
-                avg = Double.parseDouble(format.format(avg));
-                AverageMark averageMark = new AverageMark(r, avg);
-                list.add(averageMark);
-            }
-        }
-
-        return list;
-    }
+    
 }

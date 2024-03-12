@@ -72,23 +72,17 @@
                             <td>${r.subject.name}</td>
                             <td>${r.semester.name}${r.semester.year}</td>
                             <td>${r.group.name}</td>
-                            <c:set value="0" var="flag"/>
-                            <c:forEach items="${requestScope.avgMarks}" var="avg">
-                                <c:if test="${avg.registration.id eq r.id}">
-                                    <td style="text-align: center">${avg.averageMark}</td>
-                                    <c:if test="${avg.averageMark gt 5}">
-                                        <td style="color: green">Passed</td>
-                                    </c:if>
-                                    <c:if test="${avg.averageMark lt 5}">
-                                        <td style="color: red">Not Passed</td>
-                                    </c:if>
-                                    <c:set var="flag" value="${flag + 1}"/>
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${flag == 0}">
-                                <td style="text-align: center">-</td>
-                                <td>future</td>
-                            </c:if>           
+                            <td style="text-align: center">${r.averageMark}</td>
+                            
+                            <c:if test="${r.status eq true}">
+                                <td style="color: green">Passed</td>
+                            </c:if>
+                            <c:if test="${r.status eq false}">
+                                <td style="color: red">Not Pass</td>
+                            </c:if>
+                            <c:if test="${r.status eq null}">
+                                <td style="color: green">Studying</td>
+                            </c:if>
                         </tr>
 
                     </c:forEach>
