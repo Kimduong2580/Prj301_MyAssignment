@@ -45,8 +45,8 @@
         <servlet-class>controller.authentication.LogoutController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>MainScreenController</servlet-name>
-        <servlet-class>controller.mainScreen.MainScreenController</servlet-class>
+        <servlet-name>HomeScreenController</servlet-name>
+        <servlet-class>controller.home.HomeScreenController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TimeTableController</servlet-name>
@@ -93,7 +93,7 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>MainScreenController</servlet-name>
-        <url-pattern>/mainScreen</url-pattern>
+        <servlet-name>HomeScreenController</servlet-name>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
 </web-app>

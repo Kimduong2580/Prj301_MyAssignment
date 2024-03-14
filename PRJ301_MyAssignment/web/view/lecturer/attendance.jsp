@@ -43,7 +43,7 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
+                        <a class="link_hover" href="time_table">Home</a>&nbsp;|&nbsp;<b
                             >Attendance detail</b>
                     </div>
 
@@ -82,8 +82,12 @@
                                             <img width="100%" src="../view/image/${student.avatar}" alt=".." />
                                         </td>
                                         <td>
-                                            Attendance<input type="radio" value="true" name="attendance-${student.id}"/>
-                                            Absent<input  type="radio" value="false" name="attendance-${student.id}"/>
+                                            <label>
+                                                Attendance<input size="10px" type="radio" value="true" required="required" name="attendance-${student.id}"/>
+                                            </label>
+                                            <label>
+                                                Absent<input  type="radio" value="false" name="attendance-${student.id}"/>
+                                            </label>
                                         </td>
                                         <td>
                                             <input type="text" name="description-${student.id}"/>

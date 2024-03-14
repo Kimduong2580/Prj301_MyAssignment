@@ -78,16 +78,16 @@ public class AttendanceController extends HttpServlet {
         sessionDate.setTime(session.getDate());
 
         //Compare current date with session date, if more than 2 return time-table 
-        if (currentDate.after(sessionDate)) {
-            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
-        } else {
+//        if (currentDate.after(sessionDate)) {
+//            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
+//        } else {
         StudentDBContext studentDB = new StudentDBContext();
         ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
         request.setAttribute("gname", session.getGroup().getName());
         request.setAttribute("students", students);
 
         request.getRequestDispatcher("../view/lecturer/attendance.jsp").forward(request, response);
-        }
+//        }
 
     }
 
@@ -102,7 +102,7 @@ public class AttendanceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("sid");
+        String sessionId = request.getParameter("seid");
         SessionDBContext sessionDB = new SessionDBContext();
         Session session = sessionDB.getSesionBysesId(sessionId);
 

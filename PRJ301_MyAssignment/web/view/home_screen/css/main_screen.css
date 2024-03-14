@@ -108,7 +108,11 @@ tbody td{
 }
 a:hover {
     color: black !important;
-    text-decoration: underline;
+    text-decoration: none;
+}
+
+.custom_a {
+    width: 100%;
 }
 
 #footer {
@@ -123,6 +127,20 @@ a:hover {
 .column {
     width: 100%; /* Example: 100% width */
 }
+
+.custom-width {
+    max-width: 47% !important;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 5px 10px 8px 5px #11111111;
+}
+
+.row {
+    justify-content: center
+}
+
+
+
 /* Styles for small screens (e.g., smartphones) */
 @media screen and (max-width: 768px) {
     .container {

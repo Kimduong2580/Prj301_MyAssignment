@@ -42,13 +42,18 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
-                            >Attendance detail</b>
+                        <a class="link_hover" href="../home">Home</a>><a class="link_hover" href="list_student">List student</a>&nbsp;|&nbsp;<b
+                            >Grade detail</b>
                     </div>
 
                 </nav>
             </div>
             <div id="content">
+                <div id="list_group">
+                    <form id="form_list" action="view_grade" method="post">
+                        
+                    </form>
+                </div>
                 <table class="content_table content_table_1" border="1px solid black">
                     <thead>
                     <th>NO</th>

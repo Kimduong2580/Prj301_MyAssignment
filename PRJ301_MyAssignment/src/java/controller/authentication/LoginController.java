@@ -79,11 +79,10 @@ public class LoginController extends HttpServlet {
         AccountDBContext accountDB = new AccountDBContext();
         Account account = accountDB.getT(username, password);
         PrintWriter out = response.getWriter();
-        System.out.println(account);
         if (account != null) {
             HttpSession session = request.getSession();
             session.setAttribute("account", account);
-            request.getRequestDispatcher("mainScreen").forward(request, response);
+            request.getRequestDispatcher("home").forward(request, response);
         } else {
             out.print("access denied");
         }

@@ -160,3 +160,17 @@ a:hover {
 .table_main {
     margin-left: 40px;
 }
+
+.gender-options label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.gender-options input[type="radio"] {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.gender-options input[type="radio"]:checked + label {
+  font-weight: bold;
+}

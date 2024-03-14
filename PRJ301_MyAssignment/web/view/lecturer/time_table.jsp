@@ -53,7 +53,7 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
+                        <a class="link_hover" href="../home">Home</a>&nbsp;|&nbsp;<b
                             >User detail</b>
                     </div>
                     <div id="nav_right">
