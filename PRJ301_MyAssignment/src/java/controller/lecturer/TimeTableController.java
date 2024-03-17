@@ -88,10 +88,11 @@ public class TimeTableController extends BaseRequiredAuthenticationController {
         } else {
             String raw_fromDate = request.getParameter("fromDate");
             String raw_toDate = request.getParameter("toDate");
-            String lecturerId = account.getLecturer().getId();
+            String lecturerId = request.getParameter("lid");
             if (lecturerId == null || lecturerId.isEmpty()) {
                 lecturerId = account.getLecturer().getId();
             }
+            
             Date fromDate, toDate;
             LocalDate currentDate = LocalDate.now();
             LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
@@ -118,6 +119,9 @@ public class TimeTableController extends BaseRequiredAuthenticationController {
             Time_slotDBContext timeDB = new Time_slotDBContext();
             ArrayList<Time_slot> times = timeDB.list();
             request.setAttribute("times", times);
+            
+            String displayName = account.getDisplayName();
+            request.setAttribute("displayName", displayName);
 
             SessionDBContext sessionDB = new SessionDBContext();
             ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(fromDate, toDate, lecturerId);

@@ -52,8 +52,8 @@ public class AttendanceDBContext extends DBContext<Attendance> {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public Attendance getAttendanceBySessionIdAndStudentId(String sessionId, String studentId) {
-        Attendance att = new Attendance();
         String sql = "select * from Attendance a where s.sesid = ? and studentId = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -61,6 +61,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
             stm.setString(2, studentId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
+                Attendance att = new Attendance();
                 Session session = new Session();
                 session.setId(sessionId);
                 att.setSession(session);
@@ -79,9 +80,9 @@ public class AttendanceDBContext extends DBContext<Attendance> {
         } catch (SQLException ex) {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return att;
+        return null;
     }
-    
+
     public ArrayList<Attendance> getAttendancesBySessionId(String sessionId) {
         ArrayList<Attendance> list = new ArrayList<>();
         String sql = "select * from Attendance a JOIN Session s ON a.sessionId = s.sesid where s.sesid = ?";

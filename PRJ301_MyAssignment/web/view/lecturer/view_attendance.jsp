@@ -43,7 +43,7 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
+                        <a class="link_hover" href="../home">Home</a>&nbsp;|&nbsp;<b
                             >Attendance detail</b>
                     </div>
 
@@ -82,7 +82,7 @@
                                         </td>
 
                                         <td>
-                                            Attendance<input type="radio" value="true" disabled="disable"
+                                            Attendance<input type="radio" value="true" disabled="disable" style="color: blue"
                                                              <c:if test="${att.isPresent eq true}">checked="checked"</c:if>
                                                              name="attendance-${student.id}"/>
                                             Absent<input  type="radio" value="false" disabled="disable"

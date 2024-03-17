@@ -162,15 +162,15 @@ a:hover {
 }
 
 .gender-options label {
-  display: block;
-  margin-bottom: 10px;
+    display: block;
+    margin-bottom: 10px;
 }
 
 .gender-options input[type="radio"] {
-  display: inline-block;
-  margin-right: 5px;
+    display: inline-block;
+    margin-right: 5px;
 }
 
 .gender-options input[type="radio"]:checked + label {
-  font-weight: bold;
+    font-weight: bold;
 }

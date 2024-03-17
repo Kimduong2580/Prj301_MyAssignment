@@ -115,7 +115,7 @@ public class UpdateAttendanceController extends HttpServlet {
             System.out.println("status: " + status);
             String description = request.getParameter("description-" + student.getId());
             AttendanceDBContext attendanceDB = new AttendanceDBContext();
-//            attendanceDB.update(sessionId, student.getId(), status, description);
+            attendanceDB.update(sessionId, student.getId(), status, description);
         }
         request.getRequestDispatcher("time_table").forward(request, response);
 

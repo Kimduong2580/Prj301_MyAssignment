@@ -8,6 +8,7 @@ import dal.AccountDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -81,6 +82,12 @@ public class LoginController extends HttpServlet {
         PrintWriter out = response.getWriter();
         if (account != null) {
             HttpSession session = request.getSession();
+            Cookie cUsername = new Cookie("username", username);
+            Cookie CPassword = new Cookie("password", password);
+            response.addCookie(cUsername);
+            response.addCookie(CPassword);
+            cUsername.setMaxAge(60*3);
+            CPassword.setMaxAge(60*3);
             session.setAttribute("account", account);
             request.getRequestDispatcher("home").forward(request, response);
         } else {

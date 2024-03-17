@@ -109,14 +109,17 @@ public class AttendanceController extends HttpServlet {
         StudentDBContext studentDB = new StudentDBContext();
         ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
         System.out.println(students.get(0).getAvatar());
-        
+
         //insert recored attendance
         for (Student student : students) {
             String raw_status = request.getParameter("attendance-" + student.getId());
             Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
             String comment = request.getParameter("description-" + student.getId());
             AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            attendanceDB.insert(sessionId, student.getId(), status, comment);
+            Attendance attendance = attendanceDB.getAttendanceBySessionIdAndStudentId(sessionId, student.getId());
+            if (attendance == null) {
+                attendanceDB.insert(sessionId, student.getId(), status, comment);
+            }
         }
         //Update isTaken
         sessionDB.updateIsTaken(sessionId);

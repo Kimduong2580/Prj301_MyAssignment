@@ -43,7 +43,7 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="../mainScreen">Home</a>&nbsp;|&nbsp;<b
+                        <a class="link_hover" href="../home">Home</a>&nbsp;|&nbsp;<b
                             >Grade detail</b>
                     </div>
 
