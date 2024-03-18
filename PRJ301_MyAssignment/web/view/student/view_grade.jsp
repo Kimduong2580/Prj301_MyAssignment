@@ -50,7 +50,7 @@
                 </nav>
             </div>
             <div id="content">
-                <h3 style="text-align: center">Grade report for ${requestScope.account.displayName} (${requestScope.account.student.id})</h3>
+                <h3 style="text-align: center">Grade report for ${requestScope.account.displayName} (${requestScope.account.code})</h3>
                 <h6 style="text-align: center">Select a term, course ...</h6>
                 <div class="row">
                     <div class="col-md-6">

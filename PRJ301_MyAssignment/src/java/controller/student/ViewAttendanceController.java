@@ -5,6 +5,7 @@
 package controller.student;
 
 import controller.authentication.BaseRequiredAuthenticationController;
+import controller.authentication.authorization.BaseRBACController;
 import dal.AttendanceRecordDBContext;
 import dal.RegistrationDBContext;
 import dal.SemesterDBContext;
@@ -18,13 +19,14 @@ import java.util.ArrayList;
 import model.Account;
 import model.AttendanceRecord;
 import model.Registration;
+import model.Role;
 import model.Semester;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class ViewAttendanceController extends BaseRequiredAuthenticationController {
+public class ViewAttendanceController extends BaseRBACController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -62,14 +64,14 @@ public class ViewAttendanceController extends BaseRequiredAuthenticationControll
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
+     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        if (account.getStudent() == null) {
+        if (account.getCode() == null) {
             out.print("access denied");
         } else {
 
-            String studentId = account.getStudent().getId();
+            String studentId = account.getCode();
             String semesterId = request.getParameter("seId");
             String subjectId = request.getParameter("subid");
 
@@ -106,7 +108,7 @@ public class ViewAttendanceController extends BaseRequiredAuthenticationControll
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
+     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         processRequest(request, response);
     }

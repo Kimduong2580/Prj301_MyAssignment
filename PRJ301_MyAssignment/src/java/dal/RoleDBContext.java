@@ -5,77 +5,72 @@
 package dal;
 
 import java.util.ArrayList;
-import model.Account;
+import model.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Lecturer;
-import model.Student;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class AccountDBContext extends DBContext<Account> {
-
+public class RoleDBContext extends DBContext<Role> {
     public static void main(String[] args) {
-        AccountDBContext db = new AccountDBContext();
-        Account acc = db.getT("duongnkhe171819", "123");
-        System.out.println(acc.getId());
+       RoleDBContext roleDB = new RoleDBContext();
+       ArrayList<Role> roles = roleDB.list(5, "/lecturer/time_table");
+        System.out.println(roles.get(0).getName());
     }
 
-    public Account getT(String username, String password) {
-        String sql = "SELECT [accid]\n"
-                + "      ,[username]\n"
-                + "      ,[password]\n"
-                + "      ,[displayName]\n"
-                + "      ,[code]\n"
-                + "  FROM [dbo].[Account] where username = ? and password = ?";
+    public ArrayList<Role> list(int accid, String url) {
+        ArrayList<Role> roles = new ArrayList<>();
+        String sql = "select r.rid, r.rname from Account a \n"
+                + "JOIN RoleAccount ra ON a.accid = ra.accid \n"
+                + "JOIN [Role] r ON r.rid = ra.rid \n"
+                + "JOIN RoleFeature rf ON rf.rid = r.rid \n"
+                + "JOIN Feature f ON f.fid = rf.fid\n"
+                + "where f.url = ? and a.accid = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, username);
-            stm.setString(2, password);
+            stm.setString(1, url);
+            stm.setInt(2, accid);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()) {
-                Account acc = new Account();
-                acc.setId(rs.getInt("accid"));
-                acc.setUsername(username);
-                acc.setPassword(password);
-                acc.setDisplayName(rs.getString("displayName"));
-                acc.setCode(rs.getString("code"));
-                return acc;
+            while(rs.next()) {
+                Role r = new Role();
+                r.setId(rs.getInt("rid"));
+                r.setName(rs.getString("rname"));
+                roles.add(r);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoleDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return null;
+
+        return roles;
     }
 
     @Override
-    public ArrayList<Account> list() {
+    public ArrayList<Role> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void insert(Account entity) {
+    public void insert(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(Account entity) {
+    public void update(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete(Account entity) {
+    public void delete(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Account getT(int id) {
+    public Role getT(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

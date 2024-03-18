@@ -5,6 +5,7 @@
 package controller.student;
 
 import controller.authentication.BaseRequiredAuthenticationController;
+import controller.authentication.authorization.BaseRBACController;
 import dal.GradingSystemDBContext;
 import dal.RegistrationDBContext;
 import dal.SemesterDBContext;
@@ -21,6 +22,7 @@ import java.util.Set;
 import model.Account;
 import model.GradingSystem;
 import model.Registration;
+import model.Role;
 import model.Semester;
 import util.CalculatorAverageMark;
 
@@ -28,7 +30,7 @@ import util.CalculatorAverageMark;
  *
  * @author Nguyen Kim Duong
  */
-public class ViewGradeController extends BaseRequiredAuthenticationController {
+public class ViewGradeController extends BaseRBACController {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -40,13 +42,13 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
+     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        if (account.getStudent() == null) {
+        if (account.getCode() == null) {
             out.print("access denied");
         } else {
-            String studentId = account.getStudent().getId();
+            String studentId = account.getCode();
             String semesterId = request.getParameter("seid");
             String subjectId = request.getParameter("subid");
 
@@ -97,7 +99,7 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
+     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
     }
 

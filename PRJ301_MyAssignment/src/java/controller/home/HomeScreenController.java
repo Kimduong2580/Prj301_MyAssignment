@@ -5,6 +5,7 @@
 package controller.home;
 
 import controller.authentication.BaseRequiredAuthenticationController;
+import controller.authentication.authorization.BaseRBACController;
 import dal.SessionDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,13 +16,14 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import model.Account;
+import model.Role;
 import model.Session;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class HomeScreenController extends BaseRequiredAuthenticationController {
+public class HomeScreenController extends BaseRBACController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,16 +61,16 @@ public class HomeScreenController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         if (account == null) {
             request.getRequestDispatcher("view/authentication/login/loginNotification.jsp").forward(request, response);
         } else {
-            if (account.getLecturer() != null) {
+            if (roles.get(0).getId() == 2) {
                 SessionDBContext sessionDB = new SessionDBContext();
                 LocalDate currentDate = LocalDate.now();
                 LocalDate yesterday = currentDate.minusDays(1);
-                ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getLecturer().getId());
+                ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getCode());
                 request.setAttribute("sessions", sessions);
                 request.setAttribute("account", account);
                 request.getRequestDispatcher("view/home_screen/lecturer/screen.jsp").forward(request, response);
@@ -88,23 +90,23 @@ public class HomeScreenController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
 
         if (account == null) {
             request.getRequestDispatcher("view/authentication/login/loginNotification.jsp").forward(request, response);
         } else {
-            if (account.getLecturer() != null) {
+            if (roles.get(0).getId() == 2) {
                 SessionDBContext sessionDB = new SessionDBContext();
                 LocalDate currentDate = LocalDate.now();
                 LocalDate yesterday = currentDate.minusDays(1);
-                ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getLecturer().getId());
+                ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getCode());
                 request.setAttribute("sessions", sessions);
                 request.setAttribute("account", account);
                 request.getRequestDispatcher("view/home_screen/lecturer/screen.jsp").forward(request, response);
             } else {
                 request.setAttribute("account", account);
-                request.getRequestDispatcher("view/main_screen/student/screen.jsp").forward(request, response);
+                request.getRequestDispatcher("view/home_screen/student/screen.jsp").forward(request, response);
             }
         }
     }

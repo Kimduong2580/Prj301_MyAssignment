@@ -9,25 +9,16 @@ package model;
  * @author Nguyen Kim Duong
  */
 public class Account {
+    private int id;
     private String username;
     private String password;
-    private UserType userType;
-    private Student student;
-    private Lecturer lecturer;
     private String displayName;
+    private String code;
 
     public Account() {
     }
 
-    public Account(String username, String password, UserType userType, Student student, Lecturer lecturer, String displayName) {
-        this.username = username;
-        this.password = password;
-        this.userType = userType;
-        this.student = student;
-        this.lecturer = lecturer;
-        this.displayName = displayName;
-    }
-
+    
     public String getUsername() {
         return username;
     }
@@ -44,36 +35,29 @@ public class Account {
         this.password = password;
     }
 
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Lecturer getLecturer() {
-        return lecturer;
-    }
-
-    public void setLecturer(Lecturer lecturer) {
-        this.lecturer = lecturer;
-    }
-
+    
     public String getDisplayName() {
         return displayName;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
     
     

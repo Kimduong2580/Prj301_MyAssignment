@@ -5,6 +5,7 @@
 package controller.lecturer;
 
 import controller.authentication.BaseRequiredAuthenticationController;
+import controller.authentication.authorization.BaseRBACController;
 import dal.GroupDBContext;
 import dal.RegistrationDBContext;
 import java.io.IOException;
@@ -17,12 +18,13 @@ import java.util.ArrayList;
 import model.Account;
 import model.Group;
 import model.Registration;
+import model.Role;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class ViewGradeController extends BaseRequiredAuthenticationController {
+public class ViewGradeController extends BaseRBACController {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -34,9 +36,9 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
-        if (account.getLecturer() != null) {
+        if (account.getCode() != null) {
             String studentId = request.getParameter("sid");
             RegistrationDBContext registrationDB = new RegistrationDBContext();
             ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentId(studentId);
@@ -57,7 +59,7 @@ public class ViewGradeController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
 
     }

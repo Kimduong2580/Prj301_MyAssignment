@@ -5,6 +5,7 @@
 package controller.lecturer;
 
 import controller.authentication.BaseRequiredAuthenticationController;
+import controller.authentication.authorization.BaseRBACController;
 import dal.GroupDBContext;
 import dal.StudentDBContext;
 import java.io.IOException;
@@ -16,13 +17,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import model.Account;
 import model.Group;
+import model.Role;
 import model.Student;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class ListStudentController extends BaseRequiredAuthenticationController {
+public class ListStudentController extends BaseRBACController {
 
     /**
      * Returns a short description of the servlet.
@@ -35,9 +37,9 @@ public class ListStudentController extends BaseRequiredAuthenticationController 
     }// </editor-fold>
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account) throws ServletException, IOException {
-        if (account.getLecturer().getId() != null) {
-            String lid = account.getLecturer().getId();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles) throws ServletException, IOException {
+        if (account.getCode() != null) {
+            String lid = account.getCode();
             GroupDBContext groupDB = new GroupDBContext();
             ArrayList<Group> groups = groupDB.list(lid);
             if (groups.size() > 0) {
@@ -52,9 +54,9 @@ public class ListStudentController extends BaseRequiredAuthenticationController 
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account) throws ServletException, IOException {
-        if (account.getLecturer().getId() != null) {
-            String lid = account.getLecturer().getId();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles) throws ServletException, IOException {
+        if (account.getCode() != null) {
+            String lid = account.getCode();
             GroupDBContext groupDB = new GroupDBContext();
             ArrayList<Group> groups = groupDB.list(lid);
             String gid = request.getParameter("gid");
@@ -62,7 +64,7 @@ public class ListStudentController extends BaseRequiredAuthenticationController 
             ArrayList<Student> students = studentDB.listStudentBygId(gid);
             String gname = "";
             for (Group g : groups) {
-                if(g.getId().equals(gid)) {
+                if (g.getId().equals(gid)) {
                     gname = g.getName();
                 }
             }

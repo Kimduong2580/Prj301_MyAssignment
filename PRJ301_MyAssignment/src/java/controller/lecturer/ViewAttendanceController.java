@@ -4,6 +4,7 @@
  */
 package controller.lecturer;
 
+import controller.authentication.authorization.BaseRBACController;
 import dal.AttendanceDBContext;
 import dal.StudentDBContext;
 import dal.SessionDBContext;
@@ -14,7 +15,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import model.Account;
 import model.Attendance;
+import model.Role;
 import model.Session;
 import model.Student;
 
@@ -22,7 +25,7 @@ import model.Student;
  *
  * @author Nguyen Kim Duong
  */
-public class ViewAttendanceController extends HttpServlet {
+public class ViewAttendanceController extends BaseRBACController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,7 +63,7 @@ public class ViewAttendanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         String sessionId = request.getParameter("seid");
         System.out.println(sessionId);
@@ -88,7 +91,7 @@ public class ViewAttendanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         
     }

@@ -5,6 +5,7 @@
 package controller.lecturer;
 
 import controller.authentication.BaseRequiredAuthenticationController;
+import controller.authentication.authorization.BaseRBACController;
 import dal.SessionDBContext;
 import dal.Time_slotDBContext;
 import java.io.IOException;
@@ -21,12 +22,13 @@ import model.Time_slot;
 import util.DateHelper;
 import java.sql.Date;
 import model.Account;
+import model.Role;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class TimeTableController extends BaseRequiredAuthenticationController {
+public class TimeTableController extends BaseRBACController {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -38,16 +40,16 @@ public class TimeTableController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        if (account.getLecturer() == null) {
+        if (account.getCode() == null) {
             out.print("access denied");
         } else {
             String displayName = account.getDisplayName();
             request.setAttribute("displayName", displayName);
             String lecturerId;
-            lecturerId = account.getLecturer().getId();
+            lecturerId = account.getCode();
             LocalDate currentDate = LocalDate.now();
             LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
             LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
@@ -80,17 +82,17 @@ public class TimeTableController extends BaseRequiredAuthenticationController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        if (account.getLecturer() == null) {
+        if (account.getCode() == null) {
             out.print("access denied");
         } else {
             String raw_fromDate = request.getParameter("fromDate");
             String raw_toDate = request.getParameter("toDate");
             String lecturerId = request.getParameter("lid");
             if (lecturerId == null || lecturerId.isEmpty()) {
-                lecturerId = account.getLecturer().getId();
+                lecturerId = account.getCode();
             }
             
             Date fromDate, toDate;

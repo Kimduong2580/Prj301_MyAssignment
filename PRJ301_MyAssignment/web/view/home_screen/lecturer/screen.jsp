@@ -114,7 +114,7 @@
                     <br><!-- comment -->
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="btn btn-primary custom_a" href="lecturer/list_student?lid=${requestScope.account.lecturer.id}">List student</a>
+                            <a class="btn btn-primary custom_a" href="lecturer/list_student?lid=${requestScope.account.code}">List student</a>
                         </div>
                     </div>
 
