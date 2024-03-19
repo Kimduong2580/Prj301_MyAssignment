@@ -13,8 +13,7 @@
     </head>
     <body>
     <center>
-        <h1>You are not logged in
-            You need to log in to continue</h1>
+        <h1>Login denied - You need to log in to continue</h1>
         <form action="login" method="get">
             <input type="submit" value="Return login">
         </form>

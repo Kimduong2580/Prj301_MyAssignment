@@ -17,6 +17,7 @@ public class Session {
     private Time_slot time_slot;
     private Date date;
     private Boolean isTaken;
+    private Semester semester;
 
     public Session(String id, Group group, Lecturer lecturer, Room room, Time_slot time_slot, Date date, Boolean isTaken) {
         this.id = id;
@@ -85,6 +86,14 @@ public class Session {
 
     public void setIsTaken(Boolean isTaken) {
         this.isTaken = isTaken;
+    }
+
+    public Semester getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Semester semester) {
+        this.semester = semester;
     }
 
    

@@ -65,7 +65,7 @@
                     </div>
                     <div id="nav_right">
                         <a class="box_green box_hover" href="#">${requestScope.account.displayName}</a
-                        >&nbsp;|&nbsp;<a class="box_green box_hover" href="logout">logout</a
+                        >&nbsp;|&nbsp;<a class="box_green box_hover" href="logout">Logout</a
                         >&nbsp;|&nbsp;
                         <b class="box_green">CAMPUS: FPTU-Hòa Lạc</b>
                     </div>

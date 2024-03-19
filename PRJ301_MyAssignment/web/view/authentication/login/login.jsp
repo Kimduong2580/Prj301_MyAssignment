@@ -99,7 +99,7 @@
                                     <div class="login-pass">
                                         Password: <input id="input_pass" type="password" required="required" name="password" /><br />
                                     </div>
-                                    <input type="submit" name="Login" />
+                                    <input class="btn btn-secondary" type="submit" value="Login" />
                                 </form>
                             </div>
                         </td>

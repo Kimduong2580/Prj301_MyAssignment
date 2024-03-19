@@ -57,7 +57,7 @@
                         <th>Group</th>
                         <th>Code</th>
                         <th>Name</th>
-                        <th>Image</th>
+                        <th style="width: 10%">Image</th>
                         <th>Status</th>
                         <th>Comment</th>
                         </thead>
@@ -78,7 +78,7 @@
                                                 ${student.name}
                                             </td>
                                             <td>
-
+                                                <img width="100%" src="../view/image/${student.avatar}" alt=".." />
                                             </td>
 
                                             <td>
@@ -103,7 +103,7 @@
                     </table>
                     <input type="hidden" value="${param['seid']}" name="seid"/>
 
-                    <input type="submit" value="UPDATE"/>
+                    <input class="btn btn-primary" type="submit" value="UPDATE"/>
                 </form>
 
                 <div id="footer">

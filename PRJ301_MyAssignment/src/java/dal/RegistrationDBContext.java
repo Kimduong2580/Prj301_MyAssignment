@@ -287,6 +287,41 @@ public class RegistrationDBContext extends DBContext<Registration> {
         
         return regis;
     }
+    
+    public int getTotalAbsent(String studentId, String semesterId, String subjectId) {
+        int totalAbsent = 0;
+        String sql = "select totalAbsent from Registration where studentId = ? and semesterId = ? and subjectId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, studentId);
+            stm.setString(2, semesterId);
+            stm.setString(3, subjectId);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()) {
+                totalAbsent = rs.getInt("totalAbsent");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistrationDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return totalAbsent;
+    }
+    
+    public void updateTotalAbsent(String studentId, String semesterId, String subjectId, int totalAbsent) {
+        String sql = "update Registration set totalAbsent = ? where studentId = ? and semesterId = ? and subjectId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, totalAbsent);
+            stm.setString(2, studentId);
+            stm.setString(3, semesterId);
+            stm.setString(4, subjectId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistrationDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
 
     @Override
     public void insert(Registration entity) {

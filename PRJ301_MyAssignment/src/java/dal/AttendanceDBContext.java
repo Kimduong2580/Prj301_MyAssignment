@@ -22,9 +22,9 @@ public class AttendanceDBContext extends DBContext<Attendance> {
 
     public static void main(String[] args) {
         AttendanceDBContext attendanceDB = new AttendanceDBContext();
-        ArrayList<Attendance> list = attendanceDB.getAttendancesBySessionId("s33");
-        System.out.println(list.get(0).getDescription());
-        attendanceDB.update("s33", "HE171819", false, "abcd");
+        Attendance att = attendanceDB.getAttendanceBySessionIdAndStudentId("s79", "HE171819");
+        System.out.println(att.getIsPresent());
+//        attendanceDB.update("s33", "HE171819", false, "abcd");
     }
 
     public void insert(String sessionId, String studentId, Boolean isPresent, String description) {
@@ -54,7 +54,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
     }
 
     public Attendance getAttendanceBySessionIdAndStudentId(String sessionId, String studentId) {
-        String sql = "select * from Attendance a where s.sesid = ? and studentId = ?";
+        String sql = "select * from Attendance a where a.sessionId = ? and studentId = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, sessionId);
@@ -69,13 +69,11 @@ public class AttendanceDBContext extends DBContext<Attendance> {
                 Student student = new Student();
                 student.setId(rs.getString("studentId"));
                 att.setStudent(student);
-                if (rs.wasNull()) {
-                    att.setIsPresent(null);
-                } else {
-                    Boolean isPresent = rs.getBoolean("isPresent");
-                    att.setIsPresent(isPresent);
-                }
+                Object object = rs.getObject("isPresent");
+                Boolean isPresent = (Boolean) object;
+                att.setIsPresent(isPresent);
                 att.setDescription(rs.getString("description"));
+                return att;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,12 +97,10 @@ public class AttendanceDBContext extends DBContext<Attendance> {
                 Student student = new Student();
                 student.setId(rs.getString("studentId"));
                 att.setStudent(student);
-                if (rs.wasNull()) {
-                    att.setIsPresent(null);
-                } else {
-                    Boolean isPresent = rs.getBoolean("isPresent");
-                    att.setIsPresent(isPresent);
-                }
+                
+                Object object = rs.getObject("isPresent");
+                Boolean isPresent = (Boolean) object;
+                att.setIsPresent(isPresent);
                 att.setDescription(rs.getString("description"));
                 list.add(att);
 
@@ -115,7 +111,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
         return list;
     }
 
-    public void update(String sessionId, String studentId, Boolean isPresent, String desciption) {
+    public void update(String sessionId, String studentId, String subjectId, String semesterId, Boolean isPresent, String desciption) {
         String sql = "UPDATE [dbo].[Attendance]\n"
                 + "   SET \n"
                 + "      [isPresent] = ?\n"
@@ -128,6 +124,23 @@ public class AttendanceDBContext extends DBContext<Attendance> {
             stm.setString(2, desciption);
             stm.setString(3, studentId);
             stm.setString(4, sessionId);
+            Attendance att = getAttendanceBySessionIdAndStudentId(sessionId, studentId);
+            System.out.println("att: " + att);
+            if (att != null) {
+                RegistrationDBContext regis = new RegistrationDBContext();
+                if (att.getIsPresent() == false && isPresent) {
+                    System.out.println("vao 1");
+                    int totalAbsent = regis.getTotalAbsent(studentId, semesterId, subjectId);
+                    regis.updateTotalAbsent(studentId, semesterId, subjectId, totalAbsent - 1);
+                }
+                if (att.getIsPresent() == true && isPresent == false) {
+                    System.out.println("subject: " + subjectId);
+                    System.out.println("vao 2");
+                    int totalAbsent = regis.getTotalAbsent(studentId, semesterId, subjectId);
+                    System.out.println("total 1:" + totalAbsent);
+                    regis.updateTotalAbsent(studentId, semesterId, subjectId, totalAbsent + 1);
+                }
+            }
             stm.execute();
         } catch (SQLException ex) {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);

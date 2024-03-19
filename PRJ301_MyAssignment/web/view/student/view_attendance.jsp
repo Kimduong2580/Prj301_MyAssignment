@@ -109,7 +109,7 @@
                                             <td>Present</td>
                                         </c:if>
                                         <c:if test="${attr.attendance.isPresent eq false}">
-                                            <td>Absent</td>
+                                            <td style="color: red">Absent</td>
                                         </c:if>
                                         <c:if test="${attr.attendance.isPresent eq null}">
                                             <td>Future</td>
@@ -118,6 +118,10 @@
                                         <c:set value="${index + 1}" var="index"/>
                                     </tr>
                                 </c:forEach>
+                                    <tr style="background-color: #009879; color: #f3f3f3">
+                                        <td colspan="2" style="font-size: 15px"><b>Total absent:</b></td>
+                                        <td colspan="6">${requestScope.totalAbsent}/${index - 1}</td>
+                                    </tr>
                             </tbody>
                         </table>
                     </div>

@@ -115,10 +115,10 @@ public class UpdateAttendanceController extends BaseRBACController {
         for (Student student : students) {
             String raw_status = request.getParameter("attendance-" + student.getId());
             Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
-            System.out.println("status: " + status);
+            System.out.println("status1: " + status);
             String description = request.getParameter("description-" + student.getId());
             AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            attendanceDB.update(sessionId, student.getId(), status, description);
+            attendanceDB.update(sessionId, student.getId(), session.getGroup().getSubject().getId(), session.getSemester().getId(), status, description);
         }
         request.getRequestDispatcher("time_table").forward(request, response);
 

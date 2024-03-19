@@ -16,6 +16,7 @@ import model.Building;
 import model.Group;
 import model.Lecturer;
 import model.Room;
+import model.Semester;
 import model.Subject;
 import model.Time_slot;
 
@@ -89,13 +90,10 @@ public class SessionDBContext extends DBContext<Session> {
                 t.setId(rs.getString("timeId"));
                 t.setTimeBegin(rs.getString("timeBegin"));
                 t.setTimeEnd(rs.getString("timeEnd"));
-                Boolean isTaken = rs.getBoolean("isTaken");
                 s.setDate(rs.getDate("sessionDate"));
-                if (rs.wasNull()) {
-                    s.setIsTaken(null);
-                } else {
-                    s.setIsTaken(isTaken);
-                }
+                Object object = rs.getObject("isTaken");
+                Boolean isTaken = (Boolean) object;
+                s.setIsTaken(isTaken);
                 s.setGroup(g);
                 s.setLecturer(lecturer);
                 s.setRoom(r);
@@ -164,13 +162,10 @@ public class SessionDBContext extends DBContext<Session> {
                 t.setId(rs.getString("timeId"));
                 t.setTimeBegin(rs.getString("timeBegin"));
                 t.setTimeEnd(rs.getString("timeEnd"));
-                Boolean isTaken = rs.getBoolean("isTaken");
                 s.setDate(rs.getDate("sessionDate"));
-                if (rs.wasNull()) {
-                    s.setIsTaken(null);
-                } else {
-                    s.setIsTaken(isTaken);
-                }
+                Object object = rs.getObject("isTaken");
+                Boolean isTaken = (Boolean) object;
+                s.setIsTaken(isTaken);
                 s.setGroup(g);
                 s.setLecturer(lecturer);
                 s.setRoom(r);
@@ -196,7 +191,14 @@ public class SessionDBContext extends DBContext<Session> {
                 Group g = new Group();
                 g.setId(rs.getString("groupId"));
                 g.setName(rs.getString("gname"));
+                Subject sub = new Subject();
+                sub.setId(rs.getString("subjectId"));
+                g.setSubject(sub);
                 s.setGroup(g);
+                
+                Semester se = new Semester();
+                se.setId(rs.getString("seId"));
+                s.setSemester(se);
 
                 Lecturer l = new Lecturer();
                 l.setId(rs.getString("lecturerId"));
@@ -207,12 +209,9 @@ public class SessionDBContext extends DBContext<Session> {
                 s.setRoom(r);
 
                 s.setDate(rs.getDate("date"));
-                Boolean isTaken = rs.getBoolean("isTaken");
-                if (rs.wasNull()) {
-                    s.setIsTaken(null);
-                } else {
-                    s.setIsTaken(isTaken);
-                }
+                Object object = rs.getObject("isTaken");
+                Boolean isTaken = (Boolean) object;
+                s.setIsTaken(isTaken);
             }
         } catch (SQLException ex) {
             Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);

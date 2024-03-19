@@ -42,7 +42,8 @@ public class AttendanceRecordDBContext extends DBContext<AttendanceRecord> {
                 + " r.semesterId,\n"
                 + " ts.timeBegin, ts.timeEnd, \n"
                 + " rm.buildingId, rm.number,\n"
-                + " a.dateTime, a.description, a.isPresent\n"
+                + " a.dateTime, a.description, a.isPresent, \n"
+                + " r.status\n"
                 + " from\n"
                 + " Session s LEFT JOIN [Group] g ON s.groupId = g.gid \n"
                 + " LEFT JOIN Enrollment e ON e.gid = g.gid\n"
@@ -57,6 +58,8 @@ public class AttendanceRecordDBContext extends DBContext<AttendanceRecord> {
             stm.setString(2, studentId);
             stm.setString(3, semesterId);
             ResultSet rs = stm.executeQuery();
+            Boolean status = null;
+            int totalAbsent = 0;
             while (rs.next()) {
                 AttendanceRecord attr = new AttendanceRecord();
 
@@ -95,15 +98,23 @@ public class AttendanceRecordDBContext extends DBContext<AttendanceRecord> {
                 att.setStudent(s);
                 att.setSession(ses);
                 att.setDescription(rs.getString("description"));
-                if (rs.wasNull()) {
-                    att.setIsPresent(null);
-                } else {
-                    att.setIsPresent(rs.getBoolean("isPresent"));
+                Object isStatus = rs.getObject("status");
+                status = (Boolean) isStatus;
+                Object present = rs.getObject("isPresent");
+                Boolean isPresent = (Boolean) present;
+                if (isPresent != null && !isPresent) {
+                    totalAbsent += 1;
                 }
+                att.setIsPresent(isPresent);
                 attr.setSession(ses);
                 attr.setAttendance(att);
                 attrs.add(attr);
             }
+            if (status == null) {
+                RegistrationDBContext regis = new RegistrationDBContext();
+                regis.updateTotalAbsent(studentId, semesterId, subjectId, totalAbsent);
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(AttendanceRecordDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -173,11 +184,11 @@ public class AttendanceRecordDBContext extends DBContext<AttendanceRecord> {
                 s.setId(rs.getString("studentId"));
                 att.setStudent(s);
                 att.setSession(ses);
-                if (rs.wasNull()) {
-                    att.setIsPresent(null);
-                } else {
-                    att.setIsPresent(rs.getBoolean("isPresent"));
-                }
+                
+                Object present = rs.getObject("isPresent");
+                Boolean isPresent = (Boolean) present;
+                att.setIsPresent(isPresent);
+                attr.setAttendance(att);
                 attr.setSession(ses);
                 attr.setAttendance(att);
                 attrs.add(attr);

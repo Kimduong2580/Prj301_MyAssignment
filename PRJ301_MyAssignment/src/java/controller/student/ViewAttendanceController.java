@@ -91,6 +91,8 @@ public class ViewAttendanceController extends BaseRBACController {
 
                 subjectId = (subjectId == null) ? registrations.get(0).getSubject().getId() : subjectId;
                 AttendanceRecordDBContext attrsDB = new AttendanceRecordDBContext();
+                int totalAbsent = registrationDB.getTotalAbsent(studentId, semesterId, subjectId);
+                request.setAttribute("totalAbsent", totalAbsent);
                 ArrayList<AttendanceRecord> attrs = attrsDB.getAttendanceRecordsBysIdAndsubIdAndseId(studentId, subjectId, semesterId);
                 request.setAttribute("attrs", attrs);
             }

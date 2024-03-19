@@ -5,6 +5,7 @@
 package controller.lecturer;
 
 import dal.AttendanceDBContext;
+import dal.RegistrationDBContext;
 import dal.StudentDBContext;
 import dal.SessionDBContext;
 import java.io.IOException;
@@ -119,6 +120,11 @@ public class AttendanceController extends HttpServlet {
             Attendance attendance = attendanceDB.getAttendanceBySessionIdAndStudentId(sessionId, student.getId());
             if (attendance == null) {
                 attendanceDB.insert(sessionId, student.getId(), status, comment);
+                if(status == false) {
+                    RegistrationDBContext regisDB = new RegistrationDBContext();
+                    int totalAbsent = regisDB.getTotalAbsent(student.getId(), session.getSemester().getId(), session.getGroup().getSubject().getId());
+                    regisDB.updateTotalAbsent(student.getId(), session.getSemester().getId(), session.getGroup().getSubject().getId(), totalAbsent + 1);
+                }
             }
         }
         //Update isTaken

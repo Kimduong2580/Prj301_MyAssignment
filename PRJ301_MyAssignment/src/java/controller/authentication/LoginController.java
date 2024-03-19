@@ -91,7 +91,8 @@ public class LoginController extends HttpServlet {
             session.setAttribute("account", account);
             request.getRequestDispatcher("home").forward(request, response);
         } else {
-            out.print("access denied");
+//            out.print("access denied");
+            request.getRequestDispatcher("view/authentication/login/loginNotification.jsp").forward(request, response);
         }
     }
 
