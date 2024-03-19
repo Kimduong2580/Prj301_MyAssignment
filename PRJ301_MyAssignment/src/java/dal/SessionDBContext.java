@@ -30,9 +30,10 @@ public class SessionDBContext extends DBContext<Session> {
         SessionDBContext db = new SessionDBContext();
         ArrayList<Session> list = db.getSessionByDateAndStudentId(Date.valueOf("2024-2-26"), Date.valueOf("2024-3-3"), "HE171819");
         System.out.println(list.size());
-
-        Session s = db.getSesionBysesId("s104");
-        System.out.println(s.getGroup().getId());
+        int total = db.totalSessionBySubjectIdAndSemester("PRJ301", "sp24");
+        System.out.println(total);
+//        Session s = db.getSesionBysesId("s104");
+//        System.out.println(s.getGroup().getId());
     }
 
     public ArrayList<Session> getSessionByDateAndStudentId(Date fromDate, Date toDate, String studentId) {
@@ -231,6 +232,26 @@ public class SessionDBContext extends DBContext<Session> {
         } catch (SQLException ex) {
             Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public int totalSessionBySubjectIdAndSemester(String subjectId, String semesterId) {
+        String sql = "select COUNT(*) as Number_session from Session s "
+                + "JOIN [Group] g ON s.groupId = g.gid "
+                + "where g.subjectId = ? and s.seId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, subjectId);
+            stm.setString(2, semesterId);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()) {
+                int total = rs.getInt("Number_session");
+                return total;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
     }
 
     @Override

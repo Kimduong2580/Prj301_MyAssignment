@@ -121,18 +121,21 @@ public class RegistrationDBContext extends DBContext<Registration> {
 
                 Subject sub = new Subject();
                 sub.setName(rs.getString("subname"));
-                sub.setId(rs.getString("subjectId"));
+                String subjectId = rs.getString("subjectId");
+                sub.setId(subjectId);
                 sub.setCredit(rs.getInt("credit"));
                 regis.setSubject(sub);
 
                 Semester se = new Semester();
-                se.setId(rs.getString("semesterId"));
+                String semesterId = rs.getString("semesterId");
+                se.setId(semesterId);
                 se.setName(rs.getString("sename"));
                 se.setYear(rs.getInt("year"));
                 regis.setSemester(se);
 
                 Student s = new Student();
-                s.setId(rs.getString("sid"));
+                String sid = rs.getString("sid");
+                s.setId(sid);
                 s.setName(rs.getString("name"));
                 s.setSex(rs.getBoolean("sex"));
                 regis.setStudent(s);
@@ -162,7 +165,17 @@ public class RegistrationDBContext extends DBContext<Registration> {
                     averageMark = calculator.getAverageMark(gss);
                     Boolean status = null;
                     if (current_date.compareTo(dateBegin) >= 0 && current_date.compareTo(dateEnd) <= 0) {
-                        status = null;
+                        int totalAbsent = rs.getInt("totalAbsent");
+                        System.out.println("totalAbsent: " + totalAbsent);
+                        int totalSession = new SessionDBContext().totalSessionBySubjectIdAndSemester( subjectId, semesterId);
+                            System.out.println("TotalSession: " + totalSession);
+                        double percentAbsent = (double) totalAbsent/totalSession  * 100;
+                        System.out.println("percent: " + percentAbsent);
+                        if(percentAbsent > 20) {
+                            status = false;
+                        }else {
+                            status = null;
+                        } 
                     } else if (current_date.compareTo(dateEnd) > 0) {
                         if (averageMark >= 5) {
                             status = true;
@@ -263,7 +276,14 @@ public class RegistrationDBContext extends DBContext<Registration> {
                     averageMark = calculator.getAverageMark(gss);
                     Boolean status = null;
                     if (current_date.compareTo(dateBegin) >= 0 && current_date.compareTo(dateEnd) <= 0) {
-                        status = null;
+                        int totalAbsent = rs.getInt("totalAbsent");
+                        int totalSession = new SessionDBContext().totalSessionBySubjectIdAndSemester(subjecId, semesterId);
+                        double percentAbsent = (double) totalAbsent/totalSession  * 100;
+                        if(percentAbsent > 20) {
+                            status = false;
+                        }else {
+                            status = null;
+                        } 
                     } else if (current_date.compareTo(dateEnd) > 0) {
                         if (averageMark >= 5) {
                             status = true;
