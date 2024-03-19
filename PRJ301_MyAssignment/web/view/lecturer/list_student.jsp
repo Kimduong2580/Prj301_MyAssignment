@@ -74,6 +74,7 @@
                     </c:if>
                     <c:if test="${not empty requestScope.groups}">
                         <form action="list_student" id="groupForm" method="post">
+                            <input type="hidden" name="lid" value="${requestScope.lid}"/>
                             <c:forEach items="${requestScope.groups}" var="g" varStatus="loop">
                                 <input type="hidden" value="${g.id}" name="gid" id="gid_${loop.index}"/>
                                 <input 
@@ -105,7 +106,7 @@
                                             <img width="100%" src="../view/image/${s.avatar}" alt=".." />
                                         </td>
                                         <td>
-                                            <a href="view_grade?sid=${s.id}">View grade</a>
+                                            <a href="view_grade?lid=${requestScope.lid}&sid=${s.id}">View grade</a>
                                         </td>
                                         <c:if test="${s.sex eq true}"><td>Male</td></c:if>
                                         <c:if test="${s.sex eq false}"><td>Female</td></c:if>

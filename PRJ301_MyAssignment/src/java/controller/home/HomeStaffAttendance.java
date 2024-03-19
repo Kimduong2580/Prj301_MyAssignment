@@ -2,11 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.lecturer;
+package controller.home;
 
-import controller.authentication.authorization.BaseRBACController;
-import dal.AttendanceDBContext;
-import dal.StudentDBContext;
 import dal.SessionDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,18 +11,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import model.Account;
-import model.Attendance;
-import model.Role;
 import model.Session;
-import model.Student;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class ViewAttendanceController extends BaseRBACController {
+public class HomeStaffAttendance extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +40,10 @@ public class ViewAttendanceController extends BaseRBACController {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewAttendanceController</title>");
+            out.println("<title>Servlet HomeStaffAttendance</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewAttendanceController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet HomeStaffAttendance at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,28 +59,21 @@ public class ViewAttendanceController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        if (account.getCode() == null) {
-            out.print("access denied");
-        } else {
-            String sessionId = request.getParameter("seid");
-            System.out.println(sessionId);
-            SessionDBContext sessionDB = new SessionDBContext();
-            Session session = sessionDB.getSesionBysesId(sessionId);
-            StudentDBContext studentDB = new StudentDBContext();
-            ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
-//        System.out.println("Student:" +students.size());
-            request.setAttribute("gname", session.getGroup().getName());
-            request.setAttribute("students", students);
-            AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            ArrayList<Attendance> attedances = attendanceDB.getAttendancesBySessionId(sessionId);
-//        System.out.println(attedances.size());
-            request.setAttribute("attendances", attedances);
-
-            request.getRequestDispatcher("../view/lecturer/view_attendance.jsp").forward(request, response);
-        }
+        String lid = request.getParameter("lid");
+        String displayName = request.getParameter("diplayName");
+        request.setAttribute("lid", lid);
+        SessionDBContext sessionDB = new SessionDBContext();
+        LocalDate currentDate;
+        LocalDate yesterday;
+        currentDate = LocalDate.now();
+        yesterday = currentDate.minusDays(8);
+        ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), lid);
+        System.out.println("sessions: "+sessions.size());
+        request.setAttribute("displayName", displayName);
+        request.setAttribute("sessions", sessions);
+        request.getRequestDispatcher("view/lecturer/view_staff_attendance.jsp").forward(request, response);
     }
 
     /**
@@ -96,9 +85,9 @@ public class ViewAttendanceController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**

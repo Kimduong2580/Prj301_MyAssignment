@@ -48,6 +48,10 @@
         <servlet-name>HomeScreenController</servlet-name>
         <servlet-class>controller.home.HomeScreenController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HomeStaffAttendance</servlet-name>
+        <servlet-class>controller.home.HomeStaffAttendance</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TimeTableController</servlet-name>
         <url-pattern>/lecturer/time_table</url-pattern>
@@ -95,5 +99,9 @@
     <servlet-mapping>
         <servlet-name>HomeScreenController</servlet-name>
         <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeStaffAttendance</servlet-name>
+        <url-pattern>/staff_attendance</url-pattern>
     </servlet-mapping>
 </web-app>

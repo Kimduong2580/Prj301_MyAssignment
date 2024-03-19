@@ -39,6 +39,11 @@ public class ViewGradeController extends BaseRBACController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         if (account.getCode() != null) {
+            String lid;
+            if (account.getAccount_type().getId() == 3) {
+                lid = request.getParameter("lid");
+                request.setAttribute("lid", lid);
+            }
             String studentId = request.getParameter("sid");
             RegistrationDBContext registrationDB = new RegistrationDBContext();
             ArrayList<Registration> registrations = registrationDB.getRegistrationByStudentId(studentId);

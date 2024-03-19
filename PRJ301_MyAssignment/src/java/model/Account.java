@@ -14,6 +14,7 @@ public class Account {
     private String password;
     private String displayName;
     private String code;
+    private Account_type account_type;
 
     public Account() {
     }
@@ -58,6 +59,14 @@ public class Account {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Account_type getAccount_type() {
+        return account_type;
+    }
+
+    public void setAccount_type(Account_type account_type) {
+        this.account_type = account_type;
     }
     
     

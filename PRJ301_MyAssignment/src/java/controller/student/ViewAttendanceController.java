@@ -64,14 +64,20 @@ public class ViewAttendanceController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         if (account.getCode() == null) {
             out.print("access denied");
         } else {
 
-            String studentId = account.getCode();
+            String studentId;
+            if (account.getAccount_type().getId() == 1) {
+                studentId = account.getCode();
+            }else {
+                studentId = request.getParameter("sid");
+            }
+            request.setAttribute("sid", studentId);
             String semesterId = request.getParameter("seId");
             String subjectId = request.getParameter("subid");
 
@@ -110,7 +116,7 @@ public class ViewAttendanceController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         processRequest(request, response);
     }

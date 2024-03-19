@@ -4,6 +4,7 @@
  */
 package controller.lecturer;
 
+import controller.authentication.authorization.BaseRBACController;
 import dal.AttendanceDBContext;
 import dal.RegistrationDBContext;
 import dal.StudentDBContext;
@@ -24,12 +25,14 @@ import java.sql.Date;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.Calendar;
+import model.Account;
+import model.Role;
 
 /**
  *
  * @author Nguyen Kim Duong
  */
-public class AttendanceController extends HttpServlet {
+public class AttendanceController extends BaseRBACController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,7 +70,7 @@ public class AttendanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         String sessionId = request.getParameter("seid");
         SessionDBContext sessionDB = new SessionDBContext();
@@ -79,16 +82,16 @@ public class AttendanceController extends HttpServlet {
         sessionDate.setTime(session.getDate());
 
         //Compare current date with session date, if more than 2 return time-table 
-//        if (currentDate.after(sessionDate)) {
-//            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
-//        } else {
-        StudentDBContext studentDB = new StudentDBContext();
-        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
-        request.setAttribute("gname", session.getGroup().getName());
-        request.setAttribute("students", students);
+        if (currentDate.after(sessionDate) || account.getAccount_type().getId() == 2) {
+            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
+        } else {
+            StudentDBContext studentDB = new StudentDBContext();
+            ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
+            request.setAttribute("gname", session.getGroup().getName());
+            request.setAttribute("students", students);
 
-        request.getRequestDispatcher("../view/lecturer/attendance.jsp").forward(request, response);
-//        }
+            request.getRequestDispatcher("../view/lecturer/attendance.jsp").forward(request, response);
+        }
 
     }
 
@@ -101,35 +104,39 @@ public class AttendanceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String sessionId = request.getParameter("seid");
-        SessionDBContext sessionDB = new SessionDBContext();
-        Session session = sessionDB.getSesionBysesId(sessionId);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        if (account.getCode() == null) {
+            out.print("access denied");
+        } else {
+            String sessionId = request.getParameter("seid");
+            SessionDBContext sessionDB = new SessionDBContext();
+            Session session = sessionDB.getSesionBysesId(sessionId);
 
-        StudentDBContext studentDB = new StudentDBContext();
-        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
-        System.out.println(students.get(0).getAvatar());
+            StudentDBContext studentDB = new StudentDBContext();
+            ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
+            System.out.println(students.get(0).getAvatar());
 
-        //insert recored attendance
-        for (Student student : students) {
-            String raw_status = request.getParameter("attendance-" + student.getId());
-            Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
-            String comment = request.getParameter("description-" + student.getId());
-            AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            Attendance attendance = attendanceDB.getAttendanceBySessionIdAndStudentId(sessionId, student.getId());
-            if (attendance == null) {
-                attendanceDB.insert(sessionId, student.getId(), status, comment);
-                if(status == false) {
-                    RegistrationDBContext regisDB = new RegistrationDBContext();
-                    int totalAbsent = regisDB.getTotalAbsent(student.getId(), session.getSemester().getId(), session.getGroup().getSubject().getId());
-                    regisDB.updateTotalAbsent(student.getId(), session.getSemester().getId(), session.getGroup().getSubject().getId(), totalAbsent + 1);
+            //insert recored attendance
+            for (Student student : students) {
+                String raw_status = request.getParameter("attendance-" + student.getId());
+                Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
+                String comment = request.getParameter("description-" + student.getId());
+                AttendanceDBContext attendanceDB = new AttendanceDBContext();
+                Attendance attendance = attendanceDB.getAttendanceBySessionIdAndStudentId(sessionId, student.getId());
+                if (attendance == null) {
+                    attendanceDB.insert(sessionId, student.getId(), status, comment);
+                    if (status == false) {
+                        RegistrationDBContext regisDB = new RegistrationDBContext();
+                        int totalAbsent = regisDB.getTotalAbsent(student.getId(), session.getSemester().getId(), session.getGroup().getSubject().getId());
+                        regisDB.updateTotalAbsent(student.getId(), session.getSemester().getId(), session.getGroup().getSubject().getId(), totalAbsent + 1);
+                    }
                 }
             }
+            //Update isTaken
+            sessionDB.updateIsTaken(sessionId);
+            request.getRequestDispatcher("time_table").forward(request, response);
         }
-        //Update isTaken
-        sessionDB.updateIsTaken(sessionId);
-        request.getRequestDispatcher("time_table").forward(request, response);
     }
 
     /**

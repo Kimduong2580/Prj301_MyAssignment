@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account_type;
 import model.Lecturer;
 import model.Student;
 
@@ -22,8 +23,8 @@ public class AccountDBContext extends DBContext<Account> {
 
     public static void main(String[] args) {
         AccountDBContext db = new AccountDBContext();
-        Account acc = db.getT("duongnkhe171819", "123");
-        System.out.println(acc.getId());
+        Account acc = db.getT("annv", "123");
+        System.out.println(acc.getAccount_type().getId());
     }
 
     public Account getT(String username, String password) {
@@ -32,6 +33,7 @@ public class AccountDBContext extends DBContext<Account> {
                 + "      ,[password]\n"
                 + "      ,[displayName]\n"
                 + "      ,[code]\n"
+                + "      ,[acc_type]\n"
                 + "  FROM [dbo].[Account] where username = ? and password = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -45,6 +47,9 @@ public class AccountDBContext extends DBContext<Account> {
                 acc.setPassword(password);
                 acc.setDisplayName(rs.getString("displayName"));
                 acc.setCode(rs.getString("code"));
+                Account_type at = new Account_type();
+                at.setId(rs.getInt("acc_type"));
+                acc.setAccount_type(at);
                 return acc;
             }
         } catch (SQLException ex) {

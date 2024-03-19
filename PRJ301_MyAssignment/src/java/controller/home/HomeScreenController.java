@@ -66,17 +66,27 @@ public class HomeScreenController extends BaseRBACController {
         if (account == null) {
             request.getRequestDispatcher("view/authentication/login/loginNotification.jsp").forward(request, response);
         } else {
-            if (roles.get(0).getId() == 2) {
-                SessionDBContext sessionDB = new SessionDBContext();
-                LocalDate currentDate = LocalDate.now();
-                LocalDate yesterday = currentDate.minusDays(1);
-                ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getCode());
-                request.setAttribute("sessions", sessions);
-                request.setAttribute("account", account);
-                request.getRequestDispatcher("view/home_screen/lecturer/screen.jsp").forward(request, response);
-            } else {
-                request.setAttribute("account", account);
-                request.getRequestDispatcher("view/home_screen/student/screen.jsp").forward(request, response);
+            SessionDBContext sessionDB = new SessionDBContext();
+            LocalDate currentDate;
+            LocalDate yesterday;
+            switch (account.getAccount_type().getId()) {
+                case 2:
+                    currentDate = LocalDate.now();
+                    yesterday = currentDate.minusDays(1);
+                    ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getCode());
+                    request.setAttribute("sessions", sessions);
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("view/home_screen/lecturer/screen.jsp").forward(request, response);
+                    break;
+                case 1:
+                    System.out.println("th1");
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("view/home_screen/student/screen.jsp").forward(request, response);
+                    break;
+                case 3:
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("view/home_screen/staff_academic/screen.jsp").forward(request, response);
+                    break;
             }
         }
     }
@@ -96,17 +106,28 @@ public class HomeScreenController extends BaseRBACController {
         if (account == null) {
             request.getRequestDispatcher("view/authentication/login/loginNotification.jsp").forward(request, response);
         } else {
-            if (roles.get(0).getId() == 2) {
-                SessionDBContext sessionDB = new SessionDBContext();
-                LocalDate currentDate = LocalDate.now();
-                LocalDate yesterday = currentDate.minusDays(1);
-                ArrayList<Session> sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getCode());
-                request.setAttribute("sessions", sessions);
-                request.setAttribute("account", account);
-                request.getRequestDispatcher("view/home_screen/lecturer/screen.jsp").forward(request, response);
-            } else {
-                request.setAttribute("account", account);
-                request.getRequestDispatcher("view/home_screen/student/screen.jsp").forward(request, response);
+            SessionDBContext sessionDB = new SessionDBContext();
+            LocalDate currentDate;
+            LocalDate yesterday;
+            ArrayList<Session> sessions;
+            switch (account.getAccount_type().getId()) {
+                case 2:
+                    currentDate = LocalDate.now();
+                    yesterday = currentDate.minusDays(2);
+                    sessions = sessionDB.getSessionByDateAndLecturerId(Date.valueOf(yesterday), Date.valueOf(currentDate), account.getCode());
+                    request.setAttribute("sessions", sessions);
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("view/home_screen/lecturer/screen.jsp").forward(request, response);
+                    break;
+                case 1:
+                    System.out.println("th1");
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("view/home_screen/student/screen.jsp").forward(request, response);
+                    break;
+                case 3:
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("view/home_screen/staff_academic/screen.jsp").forward(request, response);
+                    break;
             }
         }
     }

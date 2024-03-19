@@ -42,7 +42,7 @@
             <div>
                 <nav>
                     <div id="nav_lef">
-                        <a class="link_hover" href="../home">Home</a>><a class="link_hover" href="list_student">List student</a>&nbsp;|&nbsp;<b
+                        <a class="link_hover" href="../home">Home</a>><a class="link_hover" href="list_student?lid=${requestScope.lid}">List student</a>&nbsp;|&nbsp;<b
                             >Grade detail</b>
                     </div>
 

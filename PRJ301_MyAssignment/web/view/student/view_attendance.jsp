@@ -64,7 +64,7 @@
                                     <div>
                                         <table>
                                             <c:forEach items="${requestScope.semesters}" var="se">
-                                                <tr><td><a href="view_attendance?seId=${se.id}">${se.name}${se.year}</a></td></tr>
+                                                <tr><td><a href="view_attendance?sid=${requestScope.sid}&seId=${se.id}">${se.name}${se.year}</a></td></tr>
                                                     </c:forEach>
                                         </table>
                                     </div>
@@ -73,7 +73,7 @@
                                     <div>
                                         <table>
                                             <c:forEach items="${requestScope.registrations}" var="r">
-                                                <tr><td><a href="view_attendance?seId=${requestScope.semesterId}&subid=${r.subject.id}">${r.subject.name}(${r.subject.id})(${r.group.name}, ${r.dateBegin})</a></td></tr>
+                                                <tr><td><a href="view_attendance?sid=${requestScope.sid}&seId=${requestScope.semesterId}&subid=${r.subject.id}">${r.subject.name}(${r.subject.id})(${r.group.name}, ${r.dateBegin})</a></td></tr>
                                             </c:forEach>
                                         </table>
                                     </div>

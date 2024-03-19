@@ -49,7 +49,11 @@ public class TimeTableController extends BaseRBACController {
             String displayName = account.getDisplayName();
             request.setAttribute("displayName", displayName);
             String lecturerId;
-            lecturerId = account.getCode();
+            if (account.getAccount_type().getId() == 2) {
+                lecturerId = account.getCode();
+            } else {
+                lecturerId = request.getParameter("lid");
+            }
             LocalDate currentDate = LocalDate.now();
             LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
             LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SUNDAY);
@@ -82,7 +86,7 @@ public class TimeTableController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         if (account.getCode() == null) {
@@ -92,9 +96,13 @@ public class TimeTableController extends BaseRBACController {
             String raw_toDate = request.getParameter("toDate");
             String lecturerId = request.getParameter("lid");
             if (lecturerId == null || lecturerId.isEmpty()) {
-                lecturerId = account.getCode();
+                if (account.getAccount_type().getId() == 2) {
+                    lecturerId = account.getCode();
+                } else {
+                    lecturerId = request.getParameter("lid");
+                }
             }
-            
+
             Date fromDate, toDate;
             LocalDate currentDate = LocalDate.now();
             LocalDate firstDayOfWeek = currentDate.with(DayOfWeek.MONDAY);
@@ -121,7 +129,7 @@ public class TimeTableController extends BaseRBACController {
             Time_slotDBContext timeDB = new Time_slotDBContext();
             ArrayList<Time_slot> times = timeDB.list();
             request.setAttribute("times", times);
-            
+
             String displayName = account.getDisplayName();
             request.setAttribute("displayName", displayName);
 

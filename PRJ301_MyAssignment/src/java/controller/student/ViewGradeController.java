@@ -48,7 +48,13 @@ public class ViewGradeController extends BaseRBACController {
         if (account.getCode() == null) {
             out.print("access denied");
         } else {
-            String studentId = account.getCode();
+            String studentId;
+            if (account.getAccount_type().getId() == 1) {
+                studentId = account.getCode();
+            }else {
+                studentId = request.getParameter("sid");
+            }
+            request.setAttribute("sid", studentId);
             String semesterId = request.getParameter("seid");
             String subjectId = request.getParameter("subid");
 

@@ -91,7 +91,7 @@
                                         <input type="date" name="fromDate" value="${requestScope.fromDate}" onchange="submitForm()">
                                         To: <input type="date" name="toDate" value="${requestScope.toDate}" onchange="submitForm()"/><br>
                                         <input type="hidden" name="sid" value="${param.sid}"/>
-                                        <input type="submit" value="SEND">
+                                        <!--<input type="submit" value="SEND">-->
                                     </form>
                                 </th>
                                 <c:forEach items="${requestScope.listNameDatesInWeek}" var="nameDates">

@@ -39,9 +39,15 @@ public class ListStudentController extends BaseRBACController {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles) throws ServletException, IOException {
         if (account.getCode() != null) {
-            String lid = account.getCode();
+            String lecturerId;
+            if (account.getAccount_type().getId() == 2) {
+                lecturerId = account.getCode();
+            } else {
+                lecturerId = request.getParameter("lid");
+            }
+            request.setAttribute("lid", lecturerId);
             GroupDBContext groupDB = new GroupDBContext();
-            ArrayList<Group> groups = groupDB.list(lid);
+            ArrayList<Group> groups = groupDB.list(lecturerId);
             if (groups.size() > 0) {
                 request.setAttribute("groups", groups);
             } else {
@@ -56,9 +62,16 @@ public class ListStudentController extends BaseRBACController {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles) throws ServletException, IOException {
         if (account.getCode() != null) {
-            String lid = account.getCode();
+            String lecturerId;
+            if (account.getAccount_type().getId() == 2) {
+                lecturerId = account.getCode();
+            } else {
+                lecturerId = request.getParameter("lid");
+            }
+            request.setAttribute("lid", lecturerId);
+
             GroupDBContext groupDB = new GroupDBContext();
-            ArrayList<Group> groups = groupDB.list(lid);
+            ArrayList<Group> groups = groupDB.list(lecturerId);
             String gid = request.getParameter("gid");
             StudentDBContext studentDB = new StudentDBContext();
             ArrayList<Student> students = studentDB.listStudentBygId(gid);

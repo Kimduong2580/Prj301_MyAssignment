@@ -28,11 +28,11 @@ public class SessionDBContext extends DBContext<Session> {
 
     public static void main(String[] args) {
         SessionDBContext db = new SessionDBContext();
-        ArrayList<Session> list = db.getSessionByDateAndStudentId(Date.valueOf("2024-2-26"), Date.valueOf("2024-3-3"), "HE171819");
+        ArrayList<Session> list = db.getSessionByDateAndLecturerId(Date.valueOf("2024-2-26"), Date.valueOf("2024-3-3"), "sonnt5");
         System.out.println(list.size());
 
-        Session s = db.getSesionBysesId("s104");
-        System.out.println(s.getGroup().getId());
+//        Session s = db.getSesionBysesId("s104");
+//        System.out.println(s.getGroup().getId());
     }
 
     public ArrayList<Session> getSessionByDateAndStudentId(Date fromDate, Date toDate, String studentId) {
@@ -123,7 +123,7 @@ public class SessionDBContext extends DBContext<Session> {
                 + "                  Subject AS sub ON g.subjectId = sub.subid INNER JOIN\n"
                 + "                  Time_slot AS t ON s.timeId = t.tid where date >= ? and date <= ? ";
         if (lid != null) {
-            sql += "and l.lid = ?";
+            sql += " and l.lid = ?";
         }
         try {
             PreparedStatement stm = connection.prepareStatement(sql);

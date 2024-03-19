@@ -68,7 +68,7 @@ public class TimeTableController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         if (account.getCode() == null) {
@@ -77,7 +77,11 @@ public class TimeTableController extends BaseRBACController {
             String displayName = account.getDisplayName();
             request.setAttribute("displayName", displayName);
             String studentId;
-            studentId = account.getCode();
+            if (account.getAccount_type().getId() == 1) {
+                studentId = account.getCode();
+            }else {
+                studentId = request.getParameter("sid");
+            }
             LocalDate currentDate = LocalDate.now();
             LocalDate firstDayInWeek = currentDate.with(DayOfWeek.MONDAY);
             LocalDate lastDayInWeek = currentDate.with(DayOfWeek.SUNDAY);
@@ -111,13 +115,18 @@ public class TimeTableController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         if (account.getCode() == null) {
             out.print("access denied");
         } else {
-            String studentId = account.getCode();
+            String studentId;
+            if (account.getAccount_type().getId() == 1) {
+                studentId = account.getCode();
+            }else {
+                studentId = request.getParameter("sid");
+            }
             String raw_fromDate = request.getParameter("fromDate");
             String raw_toDate = request.getParameter("toDate");
             LocalDate currentDate = LocalDate.now();

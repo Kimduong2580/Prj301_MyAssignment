@@ -65,22 +65,26 @@ public class UpdateAttendanceController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("seid");
-        System.out.println(sessionId);
-        SessionDBContext sessionDB = new SessionDBContext();
-        Session session = sessionDB.getSesionBysesId(sessionId);
-        // Lấy ngày hiện tại
-        Calendar currentDate = Calendar.getInstance();
-        // Lấy ngày của phiên
-        Calendar sessionDate = Calendar.getInstance();
-        sessionDate.setTime(session.getDate());
+        PrintWriter out = response.getWriter();
+        if (account.getCode() == null) {
+            out.print("access denied");
+        } else {
+            String sessionId = request.getParameter("seid");
+            System.out.println(sessionId);
+            SessionDBContext sessionDB = new SessionDBContext();
+            Session session = sessionDB.getSesionBysesId(sessionId);
+            // Lấy ngày hiện tại
+            Calendar currentDate = Calendar.getInstance();
+            // Lấy ngày của phiên
+            Calendar sessionDate = Calendar.getInstance();
+            sessionDate.setTime(session.getDate());
 
-        //Compare current date with session date, if more than 1 return time-table 
-//        if (currentDate.after(sessionDate)) {
-//            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
-//        } else {
+//            Compare current date with session date, if more than 1 return time-table 
+        if (currentDate.after(sessionDate) && account.getAccount_type().getId() == 2) {
+            request.getRequestDispatcher("../view/lecturer/expireAttendance.jsp").forward(request, response);
+        } else {
             StudentDBContext studentDB = new StudentDBContext();
             ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
             request.setAttribute("gname", session.getGroup().getName());
@@ -91,7 +95,8 @@ public class UpdateAttendanceController extends BaseRBACController {
             request.setAttribute("attendances", attedances);
 
             request.getRequestDispatcher("../view/lecturer/update_attendance.jsp").forward(request, response);
-//        }
+        }
+        }
     }
 
     /**
@@ -103,25 +108,30 @@ public class UpdateAttendanceController extends BaseRBACController {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles)
             throws ServletException, IOException {
-        String sessionId = request.getParameter("seid");
-        SessionDBContext sessionDB = new SessionDBContext();
-        Session session = sessionDB.getSesionBysesId(sessionId);
-        StudentDBContext studentDB = new StudentDBContext();
-        ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
+        PrintWriter out = response.getWriter();
+        if (account.getCode() == null) {
+            out.print("access denied");
+        } else {
+            String sessionId = request.getParameter("seid");
+            SessionDBContext sessionDB = new SessionDBContext();
+            Session session = sessionDB.getSesionBysesId(sessionId);
+            StudentDBContext studentDB = new StudentDBContext();
+            ArrayList<Student> students = studentDB.listStudentBygId(session.getGroup().getId());
 //        System.out.println(students.size());
-        //Update recoreds attendance
-        for (Student student : students) {
-            String raw_status = request.getParameter("attendance-" + student.getId());
-            Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
-            System.out.println("status1: " + status);
-            String description = request.getParameter("description-" + student.getId());
-            AttendanceDBContext attendanceDB = new AttendanceDBContext();
-            attendanceDB.update(sessionId, student.getId(), session.getGroup().getSubject().getId(), session.getSemester().getId(), status, description);
-        }
-        request.getRequestDispatcher("time_table").forward(request, response);
+            //Update recoreds attendance
+            for (Student student : students) {
+                String raw_status = request.getParameter("attendance-" + student.getId());
+                Boolean status = raw_status == null ? null : Boolean.parseBoolean(raw_status);
+                System.out.println("status1: " + status);
+                String description = request.getParameter("description-" + student.getId());
+                AttendanceDBContext attendanceDB = new AttendanceDBContext();
+                attendanceDB.update(sessionId, student.getId(), session.getGroup().getSubject().getId(), session.getSemester().getId(), status, description);
+            }
+            request.getRequestDispatcher("time_table").forward(request, response);
 
+        }
     }
 
     /**
